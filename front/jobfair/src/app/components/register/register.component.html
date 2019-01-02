@@ -1,0 +1,162 @@
+<form #registerForm="ngForm" (ngSubmit)="doRegister()">
+  <div class="form-horizontal">
+    <h2>Register</h2>
+    <p class="errmsg" *ngIf="errMsg">{{errMsg}}</p>
+    <div class="form-group">
+      <label for="username">Username</label>
+      <br /><span class="errmsg" [hidden]="username.valid">Required</span><br />
+      <div class="col-md-10">
+        <input [(ngModel)]="user.username" required #username="ngModel" name="username" class="form-control" id="username"
+          placeholder="Username" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <br /><span class="errmsg" [hidden]="password.valid">Required</span><br />
+      <div class="col-md-10">
+        <input [(ngModel)]="user.password" required #password="ngModel" name="password" class="form-control" id="password"
+          placeholder="Password" type="password" />
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-10">
+        <label>User kind:</label>
+        <div class="radio">
+          <label><input type="radio" [(ngModel)]="user.kind" name="kind" value="human" id="humanUser">Human</label>
+        </div>
+        <div class="radio">
+          <label><input type="radio" [(ngModel)]="user.kind" name="kind" value="company" id="companyUser">Company</label>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="user.kind=='human'">
+      <div class="form-group">
+        <label>First name</label>
+        <br /><span class="errmsg" [hidden]="hFirstName.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.humanInfo.firstName" #hFirstName="ngModel" [required]="user.kind=='human'" name="hFirstName"
+            class="form-control" placeholder="First name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Last name</label>
+        <br /><span class="errmsg" [hidden]="hLastName.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.humanInfo.lastName" #hLastName="ngModel" [required]="user.kind=='human'" name="hLastName"
+            class="form-control" placeholder="Last name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <br /><span class="errmsg" [hidden]="hEmail.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.humanInfo.email" #hEmail="ngModel" [required]="user.kind=='human'" name="hEmail"
+            class="form-control" placeholder="Email" type="email" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Phone</label>
+        <br /><span class="errmsg" [hidden]="hPhone.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.humanInfo.phone" #hPhone="ngModel" [required]="user.kind=='human'" name="hPhone"
+            class="form-control" placeholder="Phone" type="tel" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Study year</label>
+        <br /><span class="errmsg" [hidden]="hStudyYear.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.humanInfo.studyYear" #hStudyYear="ngModel" [required]="user.kind=='human'" type="number"
+            name="hStudyYear" class="form-control" placeholder="Study year" />
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="checkbox">
+          <label><input type="checkbox" name="hGraduated" [(ngModel)]="user.humanInfo.graduated">Graduated</label>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="user.kind=='company'">
+      <div class="form-group">
+        <label>Name</label>
+        <br /><span class="errmsg" [hidden]="cName.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.companyInfo.name" #cName="ngModel" [required]="user.kind=='company'" name="cName"
+            class="form-control" placeholder="Name" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>City</label>
+        <br /><span class="errmsg" [hidden]="cCity.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.companyInfo.city" #cCity="ngModel" [required]="user.kind=='company'" name="cCity"
+            class="form-control" placeholder="City" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Director</label>
+        <br /><span class="errmsg" [hidden]="cDirector.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.companyInfo.director" #cDirector="ngModel" [required]="user.kind=='company'" name="cDirector"
+            class="form-control" placeholder="Director" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>PIB</label>
+        <br /><span class="errmsg" [hidden]="cPIB.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.companyInfo.pib" #cPIB="ngModel" [required]="user.kind=='company'" name="cPIB" class="form-control"
+            placeholder="PIB" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Employee count</label>
+        <br /><span class="errmsg" [hidden]="cEmpCnt.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.companyInfo.employeeCount" #cEmpCnt="ngModel" [required]="user.kind=='company'" name="cEmpCnt"
+            class="form-control" placeholder="Employee count" type="number" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email</label>
+        <br /><span class="errmsg" [hidden]="cEmail.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.companyInfo.email" #cEmail="ngModel" [required]="user.kind=='company'" name="cEmail"
+            class="form-control" placeholder="Email" type="email" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Website</label>
+        <br /><span class="errmsg" [hidden]="cWebsite.valid">Required</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.companyInfo.site" #cWebsite="ngModel" [required]="user.kind=='company'" name="cWebsite"
+            class="form-control" placeholder="Website" type="url" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="cArea">Area of expertise:</label>
+        <br /><span class="errmsg" [hidden]="cArea.valid">Required</span><br />
+        <div class="col-md-10">
+          <select class="form-control" #cArea="ngModel" [required]="user.kind=='company'" [(ngModel)]="user.companyInfo.area"
+            name="cArea">
+            <option *ngFor="let areaItem of availableAreas" [value]="areaItem" [selected]="false">{{areaItem}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group">
+          <label>Specialty</label>
+          <br /><span class="errmsg" [hidden]="cSpecialty.valid">Specialty</span><br />
+          <div class="col-md-10">
+            <input [(ngModel)]="user.companyInfo.specialty" #cSpecialty="ngModel" [required]="user.kind=='company'" name="cSpecialty" class="form-control"
+              placeholder="Specialty" />
+          </div>
+        </div>
+    </div>
+    <div class="form-group">
+      <div class="col-md-10">
+        <input type="submit" value="Register" [disabled]="!registerForm.form.valid" class="btn btn-default" />
+      </div>
+    </div>
+    <a routerLink="/login">Back to login</a>
+  </div>
+</form>

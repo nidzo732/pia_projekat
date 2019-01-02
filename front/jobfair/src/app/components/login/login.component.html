@@ -1,0 +1,27 @@
+<form #loginForm="ngForm" (ngSubmit)="doLogin()">
+    <div class="form-horizontal">
+        <h2>Login</h2>
+        <p class="errmsg" *ngIf="errMsg">{{errMsg}}</p>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="username">Username</label>
+                <br><span class="errmsg" [hidden]="username.valid || username.pristine">Required</span>
+                <input [(ngModel)]="model.username" required name="username" #username="ngModel" class="form-control" placeholder="Username"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="password">Password</label>
+                <br><span class="errmsg" [hidden]="password.valid || password.pristine">Required</span>
+                <input [(ngModel)]="model.password" required name="password" #password="ngModel" class="form-control" placeholder="Password" type="password"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" [disabled]="!loginForm.form.valid" value="Log in" class="btn btn-default"/>
+            </div>
+        </div>
+        <a routerLink="/register">Register</a>
+    </div>
+
+</form>

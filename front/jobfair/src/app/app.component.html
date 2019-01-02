@@ -1,0 +1,29 @@
+<div class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Application name</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+          <li><a routerLink="/user/dashboard" *ngIf="userService.loggedIn">Dashboard</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a *ngIf="userService.loggedIn" (click)="doLogout()">Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</div>
+<div class="container body-content">
+
+  <router-outlet></router-outlet>
+
+  <hr />
+  <footer>
+    <p>&copy; 2019 - My ASP.NET Application</p>
+  </footer>
+</div>
