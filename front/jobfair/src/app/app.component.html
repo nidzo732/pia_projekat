@@ -12,8 +12,9 @@
       <ul class="nav navbar-nav">
           <li><a routerLink="/user/dashboard" *ngIf="userService.loggedIn">Dashboard</a></li>
       </ul>
-      <ul class="nav navbar-nav navbar-right">
-        <li><a *ngIf="userService.loggedIn" (click)="doLogout()">Logout</a></li>
+      <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn">
+        <li><a (click)="doLogout()">Logout</a></li>
+        <li><a routerLink="/user/setPassword">Set password</a></li>
       </ul>
     </div>
   </div>

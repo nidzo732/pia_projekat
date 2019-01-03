@@ -23,3 +23,10 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.errmsg{
+    color:red;
+}
+.row{
+    margin-top: 2em;
+}

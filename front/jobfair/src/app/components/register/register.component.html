@@ -6,7 +6,7 @@
       <label for="username">Username</label>
       <br /><span class="errmsg" [hidden]="username.valid">Required</span><br />
       <div class="col-md-10">
-        <input [(ngModel)]="user.username" required #username="ngModel" name="username" class="form-control" id="username"
+        <input [(ngModel)]="user.username" required #username="ngModel" name="username" class="form-control"
           placeholder="Username" />
       </div>
     </div>
@@ -14,8 +14,16 @@
       <label for="password">Password</label>
       <br /><span class="errmsg" [hidden]="password.valid">Required</span><br />
       <div class="col-md-10">
-        <input [(ngModel)]="user.password" required #password="ngModel" name="password" class="form-control" id="password"
+        <input [(ngModel)]="user.password" required #password="ngModel" name="password" class="form-control"
           placeholder="Password" type="password" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="picture">Picture</label>
+      <br /><span class="errmsg" [hidden]="picture.valid">Required</span><br />
+      <div class="col-md-10">
+        <input [(ngModel)]="pictUrlDummy" required #picture="ngModel" name="picture" class="form-control" placeholder="Picture"
+          type="file" (change)="pictureChange($event)" accept="image/*" />
       </div>
     </div>
     <div class="form-group">
@@ -144,13 +152,13 @@
         </div>
       </div>
       <div class="form-group">
-          <label>Specialty</label>
-          <br /><span class="errmsg" [hidden]="cSpecialty.valid">Specialty</span><br />
-          <div class="col-md-10">
-            <input [(ngModel)]="user.companyInfo.specialty" #cSpecialty="ngModel" [required]="user.kind=='company'" name="cSpecialty" class="form-control"
-              placeholder="Specialty" />
-          </div>
+        <label>Specialty</label>
+        <br /><span class="errmsg" [hidden]="cSpecialty.valid">Specialty</span><br />
+        <div class="col-md-10">
+          <input [(ngModel)]="user.companyInfo.specialty" #cSpecialty="ngModel" [required]="user.kind=='company'" name="cSpecialty"
+            class="form-control" placeholder="Specialty" />
         </div>
+      </div>
     </div>
     <div class="form-group">
       <div class="col-md-10">

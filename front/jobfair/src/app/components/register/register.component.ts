@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { User, CompanyInfo } from 'src/app/misc/user';
+import { User, CompanyInfo } from 'src/app/misc/models';
 import { UserService } from 'src/app/services/user.service';
 import { Router } from '@angular/router';
+import { FileLoader } from 'src/app/misc/fileLoader';
 
 @Component({
   selector: 'app-register',
@@ -10,6 +11,7 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent implements OnInit {
   user:User={username:"",companyInfo:{}, humanInfo:{}, kind:"human"};
+  pictUrlDummy:any;
   errMsg:String;
   availableAreas:String[];
   constructor(private userService:UserService,
@@ -24,10 +26,25 @@ export class RegisterComponent implements OnInit {
     if(result=="OK")
     {
       await this.userService.logIn(this.user.username, this.user.password);
-      this.router.navigate(["/user/dashboard"]);
+      this.router.navigate(["/dashboard"]);
     }
     else{
       this.errMsg=result;
+    }
+  }
+  async pictureChange(event:any){
+    if(event.target.files && event.target.files[0])
+    {
+      let file=event.target.files[0];
+      let loadedFile = await FileLoader.loadFile(file);      
+      if(!loadedFile.mime.startsWith("image/"))
+      {
+        this.pictUrlDummy=null;
+      }
+      else
+      {
+        this.user.picture=loadedFile.content64;
+      }
     }
   }
 

@@ -1,3 +1,25 @@
-<p>
-  dashboard works!
-</p>
+<h2>Companies, jobs and internships</h2>
+<div class="row">
+  <div class="col-sm-4">
+    <input type="text" class="form-control" placeholder="Name" (change)="reSearch()" [(ngModel)]="name">
+  </div>
+  <div class="col-sm-4">
+    <input type="text" class="form-control" placeholder="City" (change)="reSearch()" [(ngModel)]="city">
+  </div>
+  <div class="col-sm-4">
+      <select class="form-control" id="sel1" multiple (change)="reSearch()" [(ngModel)]="areas">
+        <option *ngFor="let area of availableAreas" [value]="area">{{area}}</option>
+      </select>
+    </div>
+</div>
+<div class="company-list-item" id="company-item-@item.Id" *ngFor="let company of companies">
+  <div class="company-list-item-inner">
+    <a href="#">
+      <p class="company-list-item-name">{{company.name}}</p>
+    </a>
+    <p style="width:100%;text-align:center">{{company.area}}</p>
+    <hr class="company-list-item-inner-sep" />
+    <a href="#"><img class="company-list-item-picture" [src]="company.picture" /></a>
+    <p style="width:100%;text-align:center">{{company.city}}</p>
+  </div>
+</div>

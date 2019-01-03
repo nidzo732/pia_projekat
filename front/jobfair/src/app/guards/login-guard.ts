@@ -10,14 +10,15 @@ export class LoginGuard implements CanActivate {
   constructor(private router:Router, private userService:UserService){
 
   }
-  canActivate(
+  async canActivate(
     next: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    state: RouterStateSnapshot): Promise<boolean> {
+      console.log("UUU");
+        console.log(state);
     if(!this.userService.loggedIn)
     {
       this.router.navigate(["/login"]);
       return false;
     }
-    else return true;
-  }
-}
+    let user=await this.userService.currentUser();
+    if(user.kind=="human" && user.humanInfo.cv==null)

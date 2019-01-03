@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {User} from "../misc/user"
+import {User} from "../misc/models"
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +24,9 @@ export class UserService {
     }
     return "Invalid credentials"
   }
+  async currentUser():Promise<User>{
+    return JSON.parse(localStorage["userObject"]);
+  }
   async logOut()
   {
     localStorage.removeItem("userObject");
@@ -39,6 +42,20 @@ export class UserService {
       if(alreadyExists) return "User already exists";
       this.users.push(user);
       return "OK"
+  }
+  async setPassword(oldPassword:String, newPassword:String):Promise<String>
+  {
+      let current=await this.currentUser();
+      if(current.password!=oldPassword)
+      {
+        return "Invalid old password";
+      }
+      else
+      {
+        current.password=newPassword;
+        localStorage["userObject"]=JSON.stringify(current);
+        return "OK";
+      }
   }
   constructor() { 
     if(localStorage["userObject"])

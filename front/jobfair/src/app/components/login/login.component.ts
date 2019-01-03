@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
     var result:String = await this.userService.logIn(this.model.username, this.model.password);
     if(result=="OK")
     {
-      this.router.navigate(["/user/dashboard"]);
+      this.router.navigate(["/dashboard"]);
     }
     else
     {

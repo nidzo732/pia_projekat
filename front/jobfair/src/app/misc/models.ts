@@ -5,6 +5,8 @@ export class HumanInfo{
     phone?:String;
     studyYear?:number;
     graduated?:boolean;
+    cvCreated?:Date;
+    cv?:CV;
 }
 export class CompanyInfo{
     name?:String;
@@ -16,8 +18,19 @@ export class CompanyInfo{
     site?:String;
     area?:String;
     specialty?:String;
+    picture?:String;
     static areas:String[]=[ "IT", "Telecom", "Power systems", "Civil egineering", "Architecture", "Mechanical engineering" ];
 
+}
+export class CV
+{
+    static applicationTypes:String[]=["Job", "Internship"];
+    type:String;
+    experiences:{description?:String, from?:Date, to?:Date}[];
+    education:{description?:String, from?:Date, to?:Date}[];
+    skills:String[];
+    motherTongue:String;
+    languages:String[];
 }
 export class User
 {
@@ -27,4 +40,6 @@ export class User
     humanInfo?:HumanInfo;
     companyInfo?:CompanyInfo;
     token?:String;
+    picture?:String;
+    pictureUrl?:String;
 }

@@ -7,13 +7,17 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './components/login/login.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RegisterComponent } from './components/register/register.component';
+import { SetPasswordComponent } from './components/set-password/set-password.component';
+import { CvEntryComponent } from './components/cv-entry/cv-entry.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DashboardComponent,
-    RegisterComponent
+    RegisterComponent,
+    SetPasswordComponent,
+    CvEntryComponent
   ],
   imports: [
     BrowserModule,

@@ -4,14 +4,18 @@ import {DashboardComponent} from './components/dashboard/dashboard.component';
 import { Routes, RouterModule } from '@angular/router';
 import {LoginGuard} from "./guards/login-guard";
 import { RegisterComponent } from './components/register/register.component';
+import { SetPasswordComponent } from './components/set-password/set-password.component';
+import { CvEntryComponent } from './components/cv-entry/cv-entry.component';
 
 const routes: Routes = [
   {path:"login", component:LoginComponent},
   {path:"register", component:RegisterComponent},
+  {path:"dashboard", component:DashboardComponent},
   {path:"user", canActivate:[LoginGuard], children:[
-    {path:"dashboard", component:DashboardComponent}
+    {path:"setPassword", component:SetPasswordComponent},
+    {path:"cventry", component:CvEntryComponent}
   ]},
-  {path:"", redirectTo:"/user/dashboard", pathMatch:"full"}
+  {path:"", redirectTo:"/dashboard", pathMatch:"full"}
 ];
 
 @NgModule({
