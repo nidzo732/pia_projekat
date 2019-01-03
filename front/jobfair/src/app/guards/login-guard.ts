@@ -22,3 +22,13 @@ export class LoginGuard implements CanActivate {
     }
     let user=await this.userService.currentUser();
     if(user.kind=="human" && user.humanInfo.cv==null)
+    {
+      if(state.url!="/user/cventry")
+      {
+        this.router.navigate(["/user/cventry"]);
+        return false;
+      }
+    }
+    return true;
+  }
+}

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {User} from "../misc/models"
+import {User, CV} from "../misc/models"
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +56,11 @@ export class UserService {
         localStorage["userObject"]=JSON.stringify(current);
         return "OK";
       }
+  }
+  async enterCV(cv:CV){
+    let current=await this.currentUser();
+    current.humanInfo.cv=cv;
+    localStorage["userObject"]=JSON.stringify(current);
   }
   constructor() { 
     if(localStorage["userObject"])

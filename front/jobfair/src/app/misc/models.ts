@@ -25,11 +25,11 @@ export class CompanyInfo{
 export class CV
 {
     static applicationTypes:String[]=["Job", "Internship"];
-    type:String;
-    experiences:{description?:String, from?:Date, to?:Date}[];
+    type?:String;
+    experience:{description?:String, from?:Date, to?:Date}[];
     education:{description?:String, from?:Date, to?:Date}[];
     skills:String[];
-    motherTongue:String;
+    motherTongue?:String;
     languages:String[];
 }
 export class User
