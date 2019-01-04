@@ -16,9 +16,6 @@ export class RegisterComponent implements OnInit {
   availableAreas:String[];
   constructor(private userService:UserService,
               private router:Router) { this.availableAreas=CompanyInfo.areas;}
-  dc(){
-    console.log(this.user.humanInfo.graduated);
-  }
   ngOnInit() {
   }
   async doRegister(){
@@ -29,6 +26,7 @@ export class RegisterComponent implements OnInit {
       this.router.navigate(["/dashboard"]);
     }
     else{
+      window.scrollTo(0,0);
       this.errMsg=result;
     }
   }
@@ -43,7 +41,7 @@ export class RegisterComponent implements OnInit {
       }
       else
       {
-        this.user.picture=loadedFile.content64;
+        this.user.picture=loadedFile.contentMime;
       }
     }
   }

@@ -28,9 +28,9 @@ export class CV
     type?:String;
     experience:{description?:String, from?:Date, to?:Date}[];
     education:{description?:String, from?:Date, to?:Date}[];
-    skills:String[];
+    skills:{description?:String}[];
     motherTongue?:String;
-    languages:String[];
+    languages:{description?:String}[];
 }
 export class User
 {

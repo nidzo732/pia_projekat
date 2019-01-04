@@ -75,7 +75,7 @@
         <br /><span class="errmsg" [hidden]="hStudyYear.valid">Required</span><br />
         <div class="col-md-10">
           <input [(ngModel)]="user.humanInfo.studyYear" #hStudyYear="ngModel" [required]="user.kind=='human'" type="number"
-            name="hStudyYear" class="form-control" placeholder="Study year" />
+            name="hStudyYear" class="form-control" placeholder="Study year" min="1"/>
         </div>
       </div>
       <div class="form-group">

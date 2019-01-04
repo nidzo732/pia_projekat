@@ -6,15 +6,19 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">Application name</a>
+      <a class="navbar-brand" routerLink="/">Job fair</a>
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-          <li><a routerLink="/dashboard" *ngIf="userService.loggedIn">Dashboard</a></li>
+          <li><a routerLink="/dashboard">Dashboard</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn">
+        <li><a routerLink="/user/cventry">Update my CV</a></li>
         <li><a (click)="doLogout()">Logout</a></li>
         <li><a routerLink="/user/setPassword">Set password</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" *ngIf="!userService.loggedIn">
+        <li><a routerLink="/login">Log in</a></li>
       </ul>
     </div>
   </div>

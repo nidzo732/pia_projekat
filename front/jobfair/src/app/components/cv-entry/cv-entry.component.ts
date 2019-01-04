@@ -22,8 +22,10 @@ export class CvEntryComponent implements OnInit {
   constructor(private userService:UserService) { }
 
   async ngOnInit() {
-    let user=await this.userService.currentUser();
+    let user=this.userService.currentUser();
+    console.log(user.humanInfo.cv);
     if(user.humanInfo.cv!=null) this.cv=user.humanInfo.cv;
+    else this.infoMsg="You must enter your CV first before using all capabilities of this website";
   }
   addEducation(){
     this.cv.education.push({});
@@ -34,9 +36,14 @@ export class CvEntryComponent implements OnInit {
   addExperience(){
     this.cv.experience.push({});
   }
+  addLanguage(){
+    this.cv.languages.push({});
+  }
+  addSkill(){
+    this.cv.skills.push({});
+  }
   deleteExperience(experience:any){
     this.cv.experience.splice(this.cv.experience.indexOf(experience),1);
-    this.cv
   }
   deleteLanguage(language:any){
     this.cv.languages.splice(this.cv.languages.indexOf(language),1);
@@ -45,8 +52,11 @@ export class CvEntryComponent implements OnInit {
     this.cv.skills.splice(this.cv.skills.indexOf(skill),1);
   }
   async enterCV(){
-    await this.userService.enterCV(this.cv);
-    this.infoMsg="Cv updated";
+    this.errMsg="";
+    this.infoMsg="";
+    let response = await this.userService.enterCV(this.cv);
+    if(response=="OK") this.infoMsg="CV updated";
+    else this.errMsg=response;
     window.scrollTo(0,0);
   }
 }

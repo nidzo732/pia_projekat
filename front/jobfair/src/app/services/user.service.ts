@@ -1,77 +1,64 @@
 import { Injectable } from '@angular/core';
-import {User, CV} from "../misc/models"
+import { User, CV } from "../misc/models";
+import { HttpService } from './http.service';
+
+
+const siteUrl = "http://localhost:4242";
+const registerUrl = siteUrl + "/user/register";
+const loginUrl = siteUrl + "/user/login";
+const setPasswordUrl = siteUrl + "/user/setpwd";
+const setCVUrl = siteUrl + "/user/setcv";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  public loggedIn:boolean;
-  private users:User[]=[];
-  async logIn(username:String, password:String):Promise<String>
-  {
-    var foundUser:User=null;
-    this.users.forEach(existing => {
-      if(existing.username==username && existing.password==password)
-      {
-        foundUser=existing;
-      }
-    });
-    if(foundUser)
-    {
-      localStorage["userObject"]=JSON.stringify(foundUser);
-      this.loggedIn=true;
-      return "OK";
+  public loggedIn: boolean;
+  private users: User[] = [];
+  async logIn(username: String, password: String): Promise<String> {
+    let response = await this.httpService.doPostForObject(loginUrl, { username: username, password: password });
+    if (response.message != "OK") {
+      return response.message;
     }
-    return "Invalid credentials"
+    let user: User = response.payload;
+    localStorage["userObject"] = JSON.stringify(user);
+    this.loggedIn = true;
+    return "OK";
   }
-  async currentUser():Promise<User>{
+  currentUser(): User {
+    if (!localStorage["userObject"]) return null;
     return JSON.parse(localStorage["userObject"]);
   }
-  async logOut()
-  {
+  async logOut() {
     localStorage.removeItem("userObject");
-    this.loggedIn=false;
+    this.loggedIn = false;
   }
-  async doRegister(user:User):Promise<String>
-  {
-      var alreadyExists:boolean=false;
-      this.users.forEach(existing => {
-        if(existing.username==user.username) alreadyExists=true;
-        
-      });
-      if(alreadyExists) return "User already exists";
-      this.users.push(user);
-      return "OK"
+  async doRegister(user: User): Promise<String> {
+    let result = await this.httpService.doPostForString(registerUrl, user);
+    return result;
   }
-  async setPassword(oldPassword:String, newPassword:String):Promise<String>
-  {
-      let current=await this.currentUser();
-      if(current.password!=oldPassword)
-      {
-        return "Invalid old password";
-      }
-      else
-      {
-        current.password=newPassword;
-        localStorage["userObject"]=JSON.stringify(current);
-        return "OK";
-      }
+  async setPassword(oldPassword: String, newPassword: String): Promise<String> {
+    let response = await this.httpService.doPostForString(setPasswordUrl, { oldPassword: oldPassword, newPassword: newPassword });
+    return response;
   }
-  async enterCV(cv:CV){
-    let current=await this.currentUser();
-    current.humanInfo.cv=cv;
-    localStorage["userObject"]=JSON.stringify(current);
-  }
-  constructor() { 
-    if(localStorage["userObject"])
+  async enterCV(cv: CV):Promise<String> {
+    let current = this.currentUser();
+    let response = await this.httpService.doPostForString(setCVUrl, cv);
+    if(response=="OK")
     {
-      this.loggedIn=true;
+      current.humanInfo.cv = cv;
+      localStorage["userObject"] = JSON.stringify(current);
     }
-    else
-    {
-      this.loggedIn=false;
+    return response;
+  }
+  constructor(private httpService: HttpService) {
+    if (localStorage["userObject"]) {
+      this.loggedIn = true;
+    }
+    else {
+      this.loggedIn = false;
     }
   }
-  ngOnInit(){
+  ngOnInit() {
   }
 }
