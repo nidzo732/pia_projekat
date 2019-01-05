@@ -10,6 +10,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RegisterComponent } from './components/register/register.component';
 import { SetPasswordComponent } from './components/set-password/set-password.component';
 import { CvEntryComponent } from './components/cv-entry/cv-entry.component';
+import { OfferentryComponent } from './components/offerentry/offerentry.component';
+import { CompanyInfoComponent } from './components/company-info/company-info.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { CvEntryComponent } from './components/cv-entry/cv-entry.component';
     DashboardComponent,
     RegisterComponent,
     SetPasswordComponent,
-    CvEntryComponent
+    CvEntryComponent,
+    OfferentryComponent,
+    CompanyInfoComponent
   ],
   imports: [
     BrowserModule,

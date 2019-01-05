@@ -12,14 +12,15 @@
       </select>
     </div>
 </div>
+<div class="spinner" *ngIf="loading"></div>
 <div class="company-list-item" id="company-item-@item.Id" *ngFor="let company of companies">
   <div class="company-list-item-inner">
-    <a href="#">
+    <a routerLink="/company/{{company.username}}">
       <p class="company-list-item-name">{{company.name}}</p>
     </a>
     <p style="width:100%;text-align:center">{{company.area}}</p>
-    <hr class="company-list-item-inner-sep" />
-    <a href="#"><img class="company-list-item-picture" [src]="company.picture" /></a>
     <p style="width:100%;text-align:center">{{company.city}}</p>
+    <hr class="company-list-item-inner-sep" />
+    <a routerLink="/company/{{company.username}}"><img class="company-list-item-picture" [src]="userService.getPictureUrl(company.username)" /></a>
   </div>
 </div>

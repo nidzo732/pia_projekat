@@ -11,12 +11,15 @@ export class SetPasswordComponent implements OnInit {
   newPassword:String;
   errMsg:String;
   notifMsg:String;
+  loading:boolean=false;
   constructor(private userService:UserService) { }
 
   ngOnInit() {
   }
   async setPassword(){
+    this.loading=true;
     let response=await this.userService.setPassword(this.password, this.newPassword);
+    this.loading=false;
     this.errMsg="";
     this.notifMsg="";
     if(response=="OK")

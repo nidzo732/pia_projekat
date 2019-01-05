@@ -1,7 +1,7 @@
 
 var mongoClient = require("mongodb").MongoClient;
 
-const connString="mongodb://localhost:4243/jobfair";
+const connString="mongodb://127.0.0.1:4243/jobfair";
 
 async function getClient()
 {

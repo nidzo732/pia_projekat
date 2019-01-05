@@ -18,9 +18,26 @@ export class CompanyInfo{
     site?:String;
     area?:String;
     specialty?:String;
-    picture?:String;
+    username?:String;
     static areas:String[]=[ "IT", "Telecom", "Power systems", "Civil egineering", "Architecture", "Mechanical engineering" ];
 
+}
+export class File
+{
+    name?:String;
+    mimeType?:String;
+    content64?:String;
+}
+export class Offer
+{
+    _id:String;
+    description:String;
+    longDescription?:String;
+    company:String;
+    files?:File[];
+    type:String;
+    deadline?:Date
+    static offerTypes:String[]=["Job", "Internship"];
 }
 export class CV
 {

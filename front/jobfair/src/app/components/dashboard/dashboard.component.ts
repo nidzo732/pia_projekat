@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CompanyService } from 'src/app/services/company.service';
 import { CompanyInfo } from 'src/app/misc/models';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,13 +14,15 @@ export class DashboardComponent implements OnInit {
   areas:String[];
   name:String;
   city:String;
-  constructor(private companyService:CompanyService) { }
+  loading:boolean=false;
+  constructor(private companyService:CompanyService, public userService:UserService) { }
 
   async ngOnInit() {
-    this.companies = await this.companyService.search(null,null,null);
+    this.reSearch();
   }
   async reSearch(){
-    console.log(this.areas);
-    this.companies = await this.companyService.search(this.name, this.city, this.areas);
+    this.loading=true;
+    this.companies = await this.companyService.searchCompanies(this.name, this.city, this.areas);
+    this.loading=false;
   }
 }

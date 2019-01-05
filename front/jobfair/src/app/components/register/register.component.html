@@ -1,6 +1,7 @@
 <form #registerForm="ngForm" (ngSubmit)="doRegister()">
   <div class="form-horizontal">
     <h2>Register</h2>
+    <div class="spinner" *ngIf="loading"></div>
     <p class="errmsg" *ngIf="errMsg">{{errMsg}}</p>
     <div class="form-group">
       <label for="username">Username</label>

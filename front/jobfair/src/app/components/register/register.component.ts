@@ -14,19 +14,22 @@ export class RegisterComponent implements OnInit {
   pictUrlDummy:any;
   errMsg:String;
   availableAreas:String[];
+  loading:boolean=false;
   constructor(private userService:UserService,
               private router:Router) { this.availableAreas=CompanyInfo.areas;}
   ngOnInit() {
   }
   async doRegister(){
+    window.scrollTo(0,0);
+    this.loading=true;
     var result=await this.userService.doRegister(this.user);
+    this.loading=false;
     if(result=="OK")
     {
       await this.userService.logIn(this.user.username, this.user.password);
       this.router.navigate(["/dashboard"]);
     }
     else{
-      window.scrollTo(0,0);
       this.errMsg=result;
     }
   }

@@ -10,10 +10,15 @@
     </div>
     <div class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-          <li><a routerLink="/dashboard">Dashboard</a></li>
+        <li><a routerLink="/dashboard">Dashboard</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">
+        <li><a routerLink="/user/cventry">Update my CV</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn  && userService.currentUser().kind=='company'">
+          <li><a routerLink="/user/offerentry">Enter job offer</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn">
-        <li><a routerLink="/user/cventry">Update my CV</a></li>
         <li><a (click)="doLogout()">Logout</a></li>
         <li><a routerLink="/user/setPassword">Set password</a></li>
       </ul>

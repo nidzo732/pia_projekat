@@ -1,6 +1,7 @@
 <form #cvEntryForm="ngForm" (ngSubmit)="enterCV()">
   <div class="form-horizontal">
     <h2>CV entry</h2>
+    <div class="spinner" *ngIf="loading"></div>
     <p class="errmsg" *ngIf="errMsg">{{errMsg}}</p>
     <p *ngIf="infoMsg">{{infoMsg}}</p>
     <div class="form-group">

@@ -8,13 +8,13 @@ const registerUrl = siteUrl + "/user/register";
 const loginUrl = siteUrl + "/user/login";
 const setPasswordUrl = siteUrl + "/user/setpwd";
 const setCVUrl = siteUrl + "/user/setcv";
+const pictureUrl=siteUrl+"/user/picture";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
   public loggedIn: boolean;
-  private users: User[] = [];
   async logIn(username: String, password: String): Promise<String> {
     let response = await this.httpService.doPostForObject(loginUrl, { username: username, password: password });
     if (response.message != "OK") {
@@ -50,6 +50,9 @@ export class UserService {
       localStorage["userObject"] = JSON.stringify(current);
     }
     return response;
+  }
+  getPictureUrl(username:String):String{
+    return pictureUrl+"/"+username;
   }
   constructor(private httpService: HttpService) {
     if (localStorage["userObject"]) {

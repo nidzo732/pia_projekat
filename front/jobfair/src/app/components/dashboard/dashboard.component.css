@@ -1,6 +1,7 @@
 .company-list-item {
     margin: 20px;
     width: 260px;
+    height: 260px;
     display: inline-flex;
     border: 1px solid lightgray;
     border-radius: 5px;

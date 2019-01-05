@@ -1,0 +1,56 @@
+<form #offerForm="ngForm" (ngSubmit)="createOffer()">
+    <div class="form-horizontal">
+        <h2>Job offer</h2>
+        <div class="spinner" *ngIf="loading"></div>
+        <p class="errmsg" *ngIf="errMsg">{{errMsg}}</p>
+        <p *ngIf="infoMsg">{{infoMsg}}</p>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="company">Company</label>
+                <input [(ngModel)]="offer.company" readonly name="username" #company="ngModel" class="form-control"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="description">Description</label>
+                <br><span class="errmsg" [hidden]="description.valid">Required</span>
+                <input [(ngModel)]="offer.description" required name="description" #description="ngModel" class="form-control" placeholder="Description"/>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label for="deadline">Deadline</label>
+                <br><span class="errmsg" [hidden]="deadline.valid">Required</span>
+                <input [(ngModel)]="offer.deadline" required name="deadline" #deadline="ngModel" class="form-control" placeholder="Deadline" type="date"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-sm-12">
+                <label for="Description">Details</label>
+                <textarea [(ngModel)]="offer.longDescription" name="longDescription" #longDescription="ngModel" class="form-control" placeholder="Details"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+          <div class="col-md-10">
+              <label for="Description">Offer type</label>
+              <select class="form-control" required #offerType="ngModel" [(ngModel)]="offer.type" name="offerType">
+                  <option *ngFor="let offerType of offerTypes" [value]="offerType">{{offerType}}</option>
+                </select>
+          </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+              <label>Files (max 10MB)</label>
+              <input *ngFor="let file of offer.files" required class="form-control" type="file" (change)="fileChange($event, file)"/>
+              <br/><button type="button" class="btn btn-default" (click)="addFile()">Add</button>
+            </div>
+          </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" [disabled]="!offerForm.form.valid" value="Create" class="btn btn-default"/>
+            </div>
+        </div>
+    </div>
+
+</form>

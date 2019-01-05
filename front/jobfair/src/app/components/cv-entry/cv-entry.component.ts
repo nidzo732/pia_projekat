@@ -19,6 +19,7 @@ export class CvEntryComponent implements OnInit {
   applicationTypes:String[]=CV.applicationTypes;
   errMsg:String;
   infoMsg:String;
+  loading:boolean=false;
   constructor(private userService:UserService) { }
 
   async ngOnInit() {
@@ -54,9 +55,28 @@ export class CvEntryComponent implements OnInit {
   async enterCV(){
     this.errMsg="";
     this.infoMsg="";
-    let response = await this.userService.enterCV(this.cv);
-    if(response=="OK") this.infoMsg="CV updated";
-    else this.errMsg=response;
+    let valid=true;
+    this.cv.education.forEach((x)=>{
+      if(x.from>x.to)
+      {
+        this.errMsg="From date can not be greater than to date";
+        valid=false;
+      }
+    });
+    this.cv.experience.forEach((x)=>{
+      if(x.from>x.to)
+      {
+        this.errMsg="From date can not be greater than to date";
+        valid=false;
+      }
+    });
     window.scrollTo(0,0);
+    if(valid){
+      this.loading=true;
+      let response = await this.userService.enterCV(this.cv);
+      this.loading=false;
+      if(response=="OK") this.infoMsg="CV updated";
+      else this.errMsg=response;
+    }
   }
 }
