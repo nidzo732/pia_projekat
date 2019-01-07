@@ -1,0 +1,38 @@
+<div class="spinner" *ngIf="loading"></div>
+<h2>{{offer?.description}}</h2>
+<h4>{{offer?.companyName}}</h4>
+<img [src]="userService.getPictureUrl(offer?.company)" class="main-img">
+<div class="row">
+    <div class="col-sm-3 prop-name">
+      Type
+    </div>
+    <div class="col-sm-4">
+      {{offer?.type}}
+    </div>
+  </div>
+  <div class="row">
+      <div class="col-sm-3 prop-name">
+        Deadline
+      </div>
+      <div class="col-sm-4">
+        {{formatDate(offer?.deadline)}}
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-8 col-sm-offset-2">
+        <button class="btn btn-default apply-btn" (click)="apply()" *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">Apply</button>
+      </div>
+    </div>
+<h2>Details</h2>
+<p class="long-description">
+  {{offer?.longDescription}}
+</p>
+<h2>Attachments</h2>
+<a href="{{getFileUrl(file)}}" *ngFor="let file of offer?.files">
+  <div class="file-list-item row">
+    <img src="/assets/img/filetypes/{{getFileIcon(file)}}">
+    <div class="col-sm-3 prop-name file-name">
+      {{file.name}}
+    </div>
+  </div>
+</a>

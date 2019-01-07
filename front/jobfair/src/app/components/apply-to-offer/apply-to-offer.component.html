@@ -1,0 +1,31 @@
+<div class="spinner" *ngIf="loading"></div>
+
+<form #applyForm="ngForm" (ngSubmit)="apply()">
+    <div class="form-horizontal">
+        <h2 *ngIf="offer">Apply to {{offer?.description}}</h2>
+        <h3 *ngIf="offer">By {{offer?.companyName}}</h3>
+        <div class="spinner" *ngIf="loading"></div>
+        <p class="errmsg" *ngIf="errMsg">{{errMsg}}</p>
+        <p *ngIf="infoMsg">{{infoMsg}}</p>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Upload your cover letter (max 10MB)</label>
+                <input class="form-control" type="file" (change)="fileChange($event)" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <label for="coverLetter">Or enter it manually</label>
+                <textarea [(ngModel)]="application.coverLetter" name="coverLetter" #coverLetter="ngModel" class="form-control cover-letter"
+                    placeholder="Cover letter"></textarea>
+            </div>
+        </div>
+        <h4>Your CV will automatically be sent along with the application</h4>
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" [disabled]="!applyForm.form.valid" value="Apply" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+</form>

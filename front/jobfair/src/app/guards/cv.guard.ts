@@ -13,9 +13,9 @@ export class CvGuard implements CanActivate {
       let user=this.userService.currentUser();
       if(user!=null && user.kind=="human" && user.humanInfo.cv==null)
       {
-        if(state.url!="/user/cventry")
+        if(state.url!="/cventry")
         {
-          this.router.navigate(["/user/cventry"]);
+          this.router.navigate(["/cventry"]);
           return false;
         }
       }

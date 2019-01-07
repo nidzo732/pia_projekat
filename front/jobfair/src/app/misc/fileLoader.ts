@@ -9,9 +9,14 @@ export class FileLoader{
         let reader=new FileReader();
         return new Promise<LoadedFile>((resolve, reject)=>{
             reader.onload=()=>{                
+                let type=file.type;
+                if(!type || type.length==0)
+                {
+                    type="application/octet-stream";
+                }
                 resolve({content64:(String)(reader.result).split(",")[1], 
                 name:file.name, 
-                mime:file.type,
+                mime:type,
                 contentMime:(String)(reader.result)});
             }
             reader.readAsDataURL(file);

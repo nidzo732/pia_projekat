@@ -1,0 +1,4 @@
+<h2>My offers</h2>
+<div class="spinner" *ngIf="loading"></div>
+
+<app-offer-list-item [offer]="offer" *ngFor="let offer of offers"></app-offer-list-item>

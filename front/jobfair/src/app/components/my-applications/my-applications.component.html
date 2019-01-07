@@ -1,0 +1,4 @@
+<h2>My submitted applications</h2>
+<div class="spinner" *ngIf="loading"></div>
+
+<app-application-list-item [application]="application" *ngFor="let application of applications"></app-application-list-item>

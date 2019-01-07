@@ -1,6 +1,6 @@
 <div class="spinner" *ngIf="loading"></div>
 <h2>{{companyInfo.name}}</h2>
-<img [src]="userService.getPictureUrl(companyInfo.username)" class="main-img">
+<img [src]="userService.getPictureUrl(companyInfo?.username)" class="main-img">
 <h3>Info:</h3>
 <div class="row">
   <div class="col-sm-3 prop-name">
@@ -42,3 +42,6 @@
     <a href="{{companyInfo.site}}">{{companyInfo.site}}</a>
   </div>
 </div>
+<h3>Job offers and internships</h3>
+<div class="spinner" *ngIf="offersLoading"></div>
+<app-offer-list-item [offer]="offer" *ngFor="let offer of offers"></app-offer-list-item>

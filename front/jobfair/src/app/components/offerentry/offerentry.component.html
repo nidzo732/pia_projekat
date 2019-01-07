@@ -27,13 +27,13 @@
 
         <div class="form-group">
             <div class="col-sm-12">
-                <label for="Description">Details</label>
-                <textarea [(ngModel)]="offer.longDescription" name="longDescription" #longDescription="ngModel" class="form-control" placeholder="Details"></textarea>
+                <label for="longDescription">Details</label>
+                <textarea [(ngModel)]="offer.longDescription" name="longDescription" #longDescription="ngModel" class="form-control long-description" placeholder="Details"></textarea>
             </div>
         </div>
         <div class="form-group">
           <div class="col-md-10">
-              <label for="Description">Offer type</label>
+              <label for="offerType">Offer type</label>
               <select class="form-control" required #offerType="ngModel" [(ngModel)]="offer.type" name="offerType">
                   <option *ngFor="let offerType of offerTypes" [value]="offerType">{{offerType}}</option>
                 </select>

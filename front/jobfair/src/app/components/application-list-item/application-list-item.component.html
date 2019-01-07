@@ -1,0 +1,14 @@
+<div class="application-list-item row">
+    <div class="col-sm-3 prop-name application-description">
+        <a routerLink="/offerinfo/{{application.offerId}}">
+            {{application.offerDescription}}
+        </a>
+    </div>
+    <div class="col-sm-3 prop-name application-description">
+        {{application.companyName}}
+    </div>
+    <div class="col-sm-4 application-description" [class.pending]="application.status=='Pending'" [class.accepted]="application.status=='Accepted'"
+        [class.rejected]="application.status=='Rejected'">
+        {{application.status}}
+    </div>
+</div>

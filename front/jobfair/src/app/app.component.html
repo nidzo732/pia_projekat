@@ -1,39 +1,45 @@
 <div class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-        <span class="icon-bar"></span>
-      </button>
-      <a class="navbar-brand" routerLink="/">Job fair</a>
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" routerLink="/">Job fair</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a routerLink="/dashboard">Dashboard</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar" *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">
+                <li><a routerLink="/myapplications">My applications</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar" *ngIf="userService.loggedIn && userService.currentUser().kind=='company'">
+                <li><a routerLink="/myoffers">My offers</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">
+                <li><a routerLink="/cventry">Update my CV</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn  && userService.currentUser().kind=='company'">
+                <li><a routerLink="/offerentry">Enter job offer</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn">
+                <li><a (click)="doLogout()">Logout</a></li>
+                <li><a routerLink="/setpassword">Set password</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" *ngIf="!userService.loggedIn">
+                <li><a routerLink="/login">Log in</a></li>
+            </ul>
+        </div>
     </div>
-    <div class="navbar-collapse collapse">
-      <ul class="nav navbar-nav">
-        <li><a routerLink="/dashboard">Dashboard</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">
-        <li><a routerLink="/user/cventry">Update my CV</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn  && userService.currentUser().kind=='company'">
-          <li><a routerLink="/user/offerentry">Enter job offer</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn">
-        <li><a (click)="doLogout()">Logout</a></li>
-        <li><a routerLink="/user/setPassword">Set password</a></li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right" *ngIf="!userService.loggedIn">
-        <li><a routerLink="/login">Log in</a></li>
-      </ul>
-    </div>
-  </div>
 </div>
 <div class="container body-content">
 
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 
-  <hr />
-  <footer>
-    <p>&copy; 2019 - My ASP.NET Application</p>
-  </footer>
+    <hr />
+    <footer>
+        <p>&copy; 2019 - My ASP.NET Application</p>
+    </footer>
 </div>

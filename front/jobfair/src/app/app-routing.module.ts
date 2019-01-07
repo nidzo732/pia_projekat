@@ -9,18 +9,28 @@ import { CvEntryComponent } from './components/cv-entry/cv-entry.component';
 import { CvGuard } from './guards/cv.guard';
 import { OfferentryComponent } from './components/offerentry/offerentry.component';
 import { CompanyInfoComponent } from './components/company-info/company-info.component';
+import { OnlyHumanGuard } from './guards/only-human.guard';
+import { OnlyCompanyGuard } from './guards/only-company.guard';
+import { OfferInfoComponent } from './components/offer-info/offer-info.component';
+import { ApplyToOfferComponent } from './components/apply-to-offer/apply-to-offer.component';
+import { MyApplicationsComponent } from './components/my-applications/my-applications.component';
+import { MyOffersComponent } from './components/my-offers/my-offers.component';
 
 const routes: Routes = [
   {path:"login", component:LoginComponent},
   {path:"register", component:RegisterComponent},
-  {path:"dashboard", component:DashboardComponent, canActivate:[CvGuard]},
-  {path:"company/:name", component:CompanyInfoComponent},
-  {path:"user", canActivate:[LoginGuard], children:[
-    {path:"setPassword", component:SetPasswordComponent},
-    {path:"cventry", component:CvEntryComponent},
-    {path:"offerentry", component:OfferentryComponent}
+  {path:"", canActivate:[CvGuard], children:[
+    {path:"", redirectTo:"/dashboard", pathMatch:"full"},
+    {path:"dashboard", component:DashboardComponent},
+    {path:"company/:name", component:CompanyInfoComponent},
   ]},
-  {path:"", redirectTo:"/dashboard", pathMatch:"full"}
+  {path:"myoffers", component:MyOffersComponent, canActivate:[OnlyCompanyGuard]},
+  {path:"myapplications", component:MyApplicationsComponent, canActivate:[OnlyHumanGuard]},
+  {path:"apply/:id", component:ApplyToOfferComponent, canActivate:[OnlyHumanGuard]},
+  {path:"offerinfo/:id", component:OfferInfoComponent, canActivate:[CvGuard]},
+  {path:"setpassword", canActivate:[LoginGuard], component:SetPasswordComponent},
+  {path:"cventry", component:CvEntryComponent, canActivate:[OnlyHumanGuard]},
+  {path:"offerentry", component:OfferentryComponent, canActivate:[OnlyCompanyGuard]},
 ];
 
 @NgModule({

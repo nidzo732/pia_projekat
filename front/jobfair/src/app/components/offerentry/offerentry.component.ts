@@ -4,6 +4,7 @@ import { UserService } from 'src/app/services/user.service';
 import { CompanyService } from 'src/app/services/company.service';
 import { FileLoader } from 'src/app/misc/fileLoader';
 import { load } from '@angular/core/src/render3';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-offerentry',
@@ -19,11 +20,11 @@ export class OfferentryComponent implements OnInit {
     description:"",
     files:[],
     longDescription:"",
-    type:Offer.offerTypes[0]
+    type:Offer.offerTypes[0],
   }
   offerTypes:String[]=Offer.offerTypes;
 
-  constructor(private userService:UserService, private companyService:CompanyService) { }
+  constructor(private userService:UserService, private companyService:CompanyService, private router:Router) { }
 
   ngOnInit() {
     let user=this.userService.currentUser();

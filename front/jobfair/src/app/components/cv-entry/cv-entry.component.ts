@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CV } from 'src/app/misc/models';
 import { UserService } from 'src/app/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cv-entry',
@@ -20,11 +21,10 @@ export class CvEntryComponent implements OnInit {
   errMsg:String;
   infoMsg:String;
   loading:boolean=false;
-  constructor(private userService:UserService) { }
+  constructor(private userService:UserService, private router:Router) { }
 
   async ngOnInit() {
     let user=this.userService.currentUser();
-    console.log(user.humanInfo.cv);
     if(user.humanInfo.cv!=null) this.cv=user.humanInfo.cv;
     else this.infoMsg="You must enter your CV first before using all capabilities of this website";
   }

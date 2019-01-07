@@ -1,0 +1,13 @@
+<a routerLink="/offerinfo/{{offer._id}}">
+    <div class="offer-list-item row">
+      <div class="col-sm-3 prop-name offer-description">
+        {{offer.description}}
+      </div>
+      <div class="col-sm-3 prop-name offer-description">
+        {{offer.type}}
+      </div>
+      <div class="col-sm-4">
+        Deadline: {{ formatDate(offer.deadline) }}
+      </div>
+    </div>
+  </a>

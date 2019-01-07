@@ -1,0 +1,12 @@
+.offer-list-item {
+    margin: 20px;
+    width: 80%;
+    display: inline-flex;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    padding: 5px;
+}
+.offer-description{
+    font-weight: bold;
+    font-size: 130%;
+}

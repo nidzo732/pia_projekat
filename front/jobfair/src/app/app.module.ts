@@ -12,6 +12,12 @@ import { SetPasswordComponent } from './components/set-password/set-password.com
 import { CvEntryComponent } from './components/cv-entry/cv-entry.component';
 import { OfferentryComponent } from './components/offerentry/offerentry.component';
 import { CompanyInfoComponent } from './components/company-info/company-info.component';
+import { OfferInfoComponent } from './components/offer-info/offer-info.component';
+import { ApplyToOfferComponent } from './components/apply-to-offer/apply-to-offer.component';
+import { MyApplicationsComponent } from './components/my-applications/my-applications.component';
+import { MyOffersComponent } from './components/my-offers/my-offers.component';
+import { OfferListItemComponent } from './components/offer-list-item/offer-list-item.component';
+import { ApplicationListItemComponent } from './components/application-list-item/application-list-item.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +28,13 @@ import { CompanyInfoComponent } from './components/company-info/company-info.com
     SetPasswordComponent,
     CvEntryComponent,
     OfferentryComponent,
-    CompanyInfoComponent
+    CompanyInfoComponent,
+    OfferInfoComponent,
+    ApplyToOfferComponent,
+    MyApplicationsComponent,
+    MyOffersComponent,
+    OfferListItemComponent,
+    ApplicationListItemComponent
   ],
   imports: [
     BrowserModule,

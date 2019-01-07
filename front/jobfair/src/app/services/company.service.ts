@@ -2,11 +2,14 @@ import { Injectable } from '@angular/core';
 import { CompanyInfo, User, Offer } from '../misc/models';
 import { stringify } from '@angular/core/src/util';
 import { HttpService } from './http.service';
+import { Config } from '../misc/config';
 
-const siteUrl = "http://localhost:4242";
+const siteUrl = Config.baseServerUrl;
 const companySearchUrl=siteUrl+"/company/search";
 const getCompanyUrl=siteUrl+"/company/details";
-const postNewOffer=siteUrl+"/company/newoffer";
+const postNewOfferUrl=siteUrl+"/company/newoffer";
+const searchOffersUrl=siteUrl+"/company/offers";
+const getOfferUrl=siteUrl+"/company/offer";
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +42,16 @@ export class CompanyService {
     return companies;
   }
   async createOffer(offer:Offer):Promise<String>{
-    let response=this.httpService.doPostForString(postNewOffer, offer);
+    let response=this.httpService.doPostForString(postNewOfferUrl, offer);
     return response;
+  }
+  async searchOffers(company:String):Promise<Offer[]>{
+    let response=await this.httpService.doGetForObject(searchOffersUrl+"/"+company);
+    return response.payload;
+  }
+
+  async getOffer(id:String):Promise<Offer>{
+    let response=await this.httpService.doGetForObject(getOfferUrl+"/"+id);
+    return response.payload;
   }
 }
