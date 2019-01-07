@@ -248,7 +248,7 @@ router.post("/apply", async (req, res) =>
     let body = req.body;
     let db = await getDb();
     let user = await getUserByToken(body.token, db);
-    if(user.cv==null)
+    if(user.humanInfo.cv==null)
     {
         res.status(404);
         res.send("FAIL");

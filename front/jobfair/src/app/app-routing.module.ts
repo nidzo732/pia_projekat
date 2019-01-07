@@ -29,7 +29,7 @@ const routes: Routes = [
         ]
     },
     { path: "myoffers", component: MyOffersComponent, canActivate: [OnlyCompanyGuard] },
-    { path: "applicationinfo", component: ApplicationInfoComponent, canActivate: [OnlyCompanyGuard] },
+    { path: "applicationinfo/:id", component: ApplicationInfoComponent, canActivate: [OnlyCompanyGuard] },
     { path: "applicationsforoffer/:id", component: ApplicationsForOfferComponent, canActivate: [OnlyCompanyGuard] },
     { path: "myapplications", component: MyApplicationsComponent, canActivate: [OnlyHumanGuard] },
     { path: "apply/:id", component: ApplyToOfferComponent, canActivate: [OnlyHumanGuard] },

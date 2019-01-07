@@ -58,7 +58,6 @@ export class ApplyToOfferComponent implements OnInit
             return;
         }
         this.application.offerId=this.offer._id;
-        console.log(this.application);
         this.loading = true;
         let response = await this.userService.applyToOffer(this.application);
         this.loading = false;

@@ -44,7 +44,7 @@ function validOffer(offer)
     let offerTypes = ["Job", "Internship"];
     if (!offer) return "FAIL";
     if (!offer.description) return "FAIL";
-    if (offer.type == null || offerTypes.indexOf(offer.type) == -1) return "FAIL";
+    if (!offer.type || offerTypes.indexOf(offer.type) == -1) return "FAIL";
     let deadline = new Date(offer.deadline);
     if (isNaN(deadline.getDate())) return "FAIL";
     if (offer.files && offer.files.length > 0)
@@ -67,7 +67,7 @@ router.post("/newoffer", async (req, res) =>
     let body = req.body;
     let offer = body.payload;
     let user = await users.getUserByToken(body.token, db);
-    if (user == null || user.kind != "company")
+    if (!user || user.kind != "company")
     {
         res.send("FAIL")
         return;
@@ -124,7 +124,7 @@ router.get("/offerfile/:offerid/:fileindex", async (req, res) =>
     let fileindex = req.params.fileindex;
     let query = { _id: ObjectId(offer) };
     let result = await db.collection("offers").findOne(query);
-    if (result == null || result.files == null
+    if (!result || result.files == null
         || result.files.length <= fileindex)
     {
         res.status(404);
@@ -141,5 +141,81 @@ router.get("/offerfile/:offerid/:fileindex", async (req, res) =>
     res.end(buffer);
 
 })
+
+router.post("/applications", async (req, res)=>{
+    let db = await getDb();
+    let body=req.body;
+    let user=await users.getUserByToken(body.token, db);
+    if(!user || user.kind!="company")
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let offerId = req.body.payload.offerId;
+    let offer=await db.collection("offers").findOne({_id:ObjectId(offerId)});
+    if(!offer || offer.company!=user.username)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let applications = await db.collection("applications").find({offerId:offerId}, { projection: { "coverLetterUpload.content64":0 } }).toArray();
+    res.json({message:"OK", payload:applications});
+});
+router.post("/application", async (req, res)=>{
+    let db = await getDb();
+    let body=req.body;
+    let user=await users.getUserByToken(body.token, db);
+    if(!user || user.kind!="company")
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let id = req.body.payload.id;
+    let application=await db.collection("applications").findOne({_id:ObjectId(id)}, { projection: { "coverLetterUpload.content64":0 } });
+    if(!application)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let offer = await db.collection("offers").findOne({_id:ObjectId(application.offerId)});
+    if(!offer || offer.company!=user.username)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    res.json({message:"OK", payload:application});
+});
+router.post("/coverletter", async (req, res)=>{
+    let db = await getDb();
+    let body=req.body;
+    let user=await users.getUserByToken(body.token, db);
+    if(!user || user.kind!="company")
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let id = req.body.payload.id;
+    let application=await db.collection("applications").findOne({_id:ObjectId(id)});
+    if(!application || !application.coverLetterUpload)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let offer = await db.collection("offers").findOne({_id:ObjectId(application.offerId)});
+    if(!offer || offer.company!=user.username)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    res.json({message:"OK", payload:application.coverLetterUpload});
+});
 
 exports.router = router;

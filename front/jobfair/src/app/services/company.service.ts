@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompanyInfo, User, Offer, JobApplication } from '../misc/models';
+import { CompanyInfo, User, Offer, JobApplication, File } from '../misc/models';
 import { stringify } from '@angular/core/src/util';
 import { HttpService } from './http.service';
 import { Config } from '../misc/config';
@@ -12,6 +12,7 @@ const searchOffersUrl = siteUrl + "/company/offers";
 const getOfferUrl = siteUrl + "/company/offer";
 const getApplicationsUrl = siteUrl + "/company/applications";
 const getApplicationUrl = siteUrl + "/company/application";
+const getCoverLetterUrl = siteUrl + "/company/coverletter";
 
 @Injectable({
     providedIn: 'root'
@@ -70,6 +71,11 @@ export class CompanyService
     async getApplication(id:String):Promise<JobApplication>
     {
         let response=await this.httpService.doPostForObject(getApplicationUrl, {id:id});
+        return response.payload;
+    }
+    async getCoverLetter(id:String):Promise<File>
+    {
+        let response=await this.httpService.doPostForObject(getCoverLetterUrl, {id:id});
         return response.payload;
     }
 }

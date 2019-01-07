@@ -1,3 +1,11 @@
-<p>
-  application-info works!
+<h2>{{application.userLongName}}</h2>
+<div class="spinner" *ngIf="loading"></div>
+<img [src]="userService.getPictureUrl(application?.username)" class="main-img">
+<h3 *ngIf="application.coverLetter">Cover letter</h3>
+<p class="motivational-letter-text" *ngIf="application.coverLetter">
+    {{application.coverLetter}}
 </p>
+<h3 *ngIf="application.coverLetterUpload">Uploaded cover letter</h3>
+<a href="javascript:;" *ngIf="application.coverLetterUpload" (click)="downloadCoverLetter()">
+    <app-file-list-item [file]="application.coverLetterUpload" *ngIf="application.coverLetterUpload"></app-file-list-item>
+</a>

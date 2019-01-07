@@ -9,7 +9,6 @@ import { File } from 'src/app/misc/models';
 export class FileListItemComponent implements OnInit
 {
     @Input() file: File;
-    @Input() url: String = "";
     constructor() { }
 
     ngOnInit()

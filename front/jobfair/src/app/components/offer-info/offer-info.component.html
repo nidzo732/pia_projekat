@@ -29,4 +29,6 @@
   {{offer?.longDescription}}
 </p>
 <h2>Attachments</h2>
-<app-file-list-item url="{{getFileUrl(file)}}" [file]="file" *ngFor="let file of offer?.files"></app-file-list-item>
+<a href="{{getFileUrl(file)}}" *ngFor="let file of offer?.files">
+    <app-file-list-item [file]="file"></app-file-list-item>
+</a>
