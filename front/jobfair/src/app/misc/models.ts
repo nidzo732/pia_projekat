@@ -107,6 +107,7 @@ export class File {
     }
 }
 export class JobApplication{
+    _id?:String;
     offerId?:String;
     username?:String;
     userLongName?:String;

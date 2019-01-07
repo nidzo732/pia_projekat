@@ -21,6 +21,7 @@
     <div class="row">
       <div class="col-sm-8 col-sm-offset-2">
         <button class="btn btn-default apply-btn" (click)="apply()" *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">Apply</button>
+        <button class="btn btn-default apply-btn" (click)="listApplications()" *ngIf="canListApplications()">Applications</button>
       </div>
     </div>
 <h2>Details</h2>
@@ -28,11 +29,4 @@
   {{offer?.longDescription}}
 </p>
 <h2>Attachments</h2>
-<a href="{{getFileUrl(file)}}" *ngFor="let file of offer?.files">
-  <div class="file-list-item row">
-    <img src="/assets/img/filetypes/{{getFileIcon(file)}}">
-    <div class="col-sm-3 prop-name file-name">
-      {{file.name}}
-    </div>
-  </div>
-</a>
+<app-file-list-item url="{{getFileUrl(file)}}" [file]="file" *ngFor="let file of offer?.files"></app-file-list-item>

@@ -18,6 +18,9 @@ import { MyApplicationsComponent } from './components/my-applications/my-applica
 import { MyOffersComponent } from './components/my-offers/my-offers.component';
 import { OfferListItemComponent } from './components/offer-list-item/offer-list-item.component';
 import { ApplicationListItemComponent } from './components/application-list-item/application-list-item.component';
+import { ApplicationsForOfferComponent } from './components/applications-for-offer/applications-for-offer.component';
+import { FileListItemComponent } from './components/file-list-item/file-list-item.component';
+import { ApplicationInfoComponent } from './components/application-info/application-info.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,10 @@ import { ApplicationListItemComponent } from './components/application-list-item
     MyApplicationsComponent,
     MyOffersComponent,
     OfferListItemComponent,
-    ApplicationListItemComponent
+    ApplicationListItemComponent,
+    ApplicationsForOfferComponent,
+    FileListItemComponent,
+    ApplicationInfoComponent
   ],
   imports: [
     BrowserModule,

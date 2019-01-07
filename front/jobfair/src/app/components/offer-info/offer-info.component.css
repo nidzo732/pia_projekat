@@ -5,21 +5,6 @@
 .long-description{
     white-space:pre-wrap;
 }
-.prop-name{
-    font-weight: bold
-}
-.file-list-item {
-    margin: 20px;
-    width: 80%;
-    display: inline-flex;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    padding: 5px;
-}
-.file-name{
-    align-self: center;
-    font-size: 150%;
-}
 .apply-btn
 {
     width: 100%;

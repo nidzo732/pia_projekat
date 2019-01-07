@@ -1,0 +1,14 @@
+<h2>Applications for offer</h2>
+<div class="spinner" *ngIf="loading"></div>
+
+<div class="application-list-item row" *ngFor="let application of applications">
+    <div class="col-sm-3 prop-name application-description">
+        <a routerLink="/applicationinfo/{{application._id}}">
+            {{application.userLongName}}
+        </a>
+    </div>
+    <div class="col-sm-4 application-description" [class.pending]="application.status=='Pending'" [class.accepted]="application.status=='Accepted'"
+        [class.rejected]="application.status=='Rejected'">
+        {{application.status}}
+    </div>
+</div>

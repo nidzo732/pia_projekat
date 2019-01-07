@@ -36,3 +36,6 @@ textarea {
     height: 50px;
     background-repeat: round;
 }
+.prop-name{
+    font-weight: bold
+}
