@@ -5,3 +5,15 @@
     max-width: 40%;
     max-height: 200px;
 }
+.pending{
+    color: yellow;
+}
+.rejected{
+    color: red;
+}
+.accepted{
+    color: green;
+}
+.btn{
+    width: 100%
+}

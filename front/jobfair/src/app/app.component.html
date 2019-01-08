@@ -18,7 +18,11 @@
             <ul class="nav navbar-nav navbar" *ngIf="userService.loggedIn && userService.currentUser().kind=='company'">
                 <li><a routerLink="/myoffers">My offers</a></li>
             </ul>
-            <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">
+            <ul class="nav navbar-nav navbar" *ngIf="userService.loggedIn && userService.currentUser().kind=='admin'">
+                <li><a routerLink="/fairentry">New fair</a></li>
+                <li><a routerLink="/adminconfig">Config</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn && userService.currentUser().kind=='human' && userService.currentUser().canFillCV">
                 <li><a routerLink="/cventry">Update my CV</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn  && userService.currentUser().kind=='company'">

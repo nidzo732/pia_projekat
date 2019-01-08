@@ -2,3 +2,7 @@
     max-width: none;
     min-height: 10em;
 }
+.expired{
+    color:red;
+    font-weight: bold;
+}

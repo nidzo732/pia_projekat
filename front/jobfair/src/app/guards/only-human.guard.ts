@@ -16,7 +16,7 @@ export class OnlyHumanGuard implements CanActivate {
         this.router.navigate(["/"]);
         return false;
       }
-      if(user.humanInfo.cv==null)
+      if(user.humanInfo.cv==null && !user.admin)
       {
         if(state.url!="/cventry")
         {

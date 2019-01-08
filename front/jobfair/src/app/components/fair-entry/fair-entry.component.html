@@ -1,0 +1,10 @@
+<h2>New fair</h2>
+
+<div class="row" *ngIf="step==0">
+    <div class="form-group">
+        <div class="col-md-10">
+            <label>Upload fair json</label>
+            <input class="form-control" type="file" (change)="json1Change($event)" />
+        </div>
+    </div>
+</div>

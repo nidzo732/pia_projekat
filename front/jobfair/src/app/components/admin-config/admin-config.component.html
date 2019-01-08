@@ -1,0 +1,8 @@
+<h2>Admin configuration</h2>
+<p class="errmsg" *ngIf="errMsg">{{errMsg}}</p>
+<p *ngIf="infoMsg">{{infoMsg}}</p>
+<div class="row form-group">
+    <label>CV entry deadline (days)</label>
+    <input type="number" class="form-control" [(ngModel)]="config.cvDeadline" placeholder="Deadline"/>
+</div>
+<button class="btn btn-default" (click)="update()">Update</button>

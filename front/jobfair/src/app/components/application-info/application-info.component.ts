@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { JobApplication } from 'src/app/misc/models';
+import { JobApplication, User } from 'src/app/misc/models';
 import { ActivatedRoute } from '@angular/router';
 import { CompanyService } from 'src/app/services/company.service';
 import { saveAs } from "file-saver"
@@ -16,6 +16,7 @@ export class ApplicationInfoComponent implements OnInit
     application: JobApplication = {
 
     };
+    applicant:User;
     constructor(private route: ActivatedRoute,
         private companyService: CompanyService,
         public userService: UserService) { }
@@ -24,6 +25,8 @@ export class ApplicationInfoComponent implements OnInit
     {
         let appId = this.route.snapshot.paramMap.get("id");
         this.application = await this.companyService.getApplication(appId);
+        this.applicant=await this.companyService.getApplicantInfo(appId);
+        console.log(this.applicant);
         this.loading = false;
     }
     async downloadCoverLetter()
@@ -40,5 +43,19 @@ export class ApplicationInfoComponent implements OnInit
             type: file.mimeType.toString()
         });
         saveAs(blob, file.name);
+    }
+    async accept()
+    {
+        this.loading=true;
+        await this.companyService.postApplicationStatus(this.application._id, true);
+        this.application.status="Accepted";
+        this.loading=false;
+    }
+    async reject()
+    {
+        this.loading=true;
+        await this.companyService.postApplicationStatus(this.application._id, false);
+        this.application.status="Rejected";
+        this.loading=false;
     }
 }

@@ -11,7 +11,7 @@ export class CvGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot): Promise<boolean> {
       let user=this.userService.currentUser();
-      if(user!=null && user.kind=="human" && user.humanInfo.cv==null)
+      if(user!=null && user.kind=="human" && user.humanInfo.cv==null && !user.admin)
       {
         if(state.url!="/cventry")
         {

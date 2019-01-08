@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompanyService } from 'src/app/services/company.service';
-import { Offer } from 'src/app/misc/models';
+import { Offer, JobApplication } from 'src/app/misc/models';
 import { File } from "../../misc/models";
 import { UserService } from 'src/app/services/user.service';
 import { Config } from 'src/app/misc/config';
@@ -14,14 +14,25 @@ import { Config } from 'src/app/misc/config';
 export class OfferInfoComponent implements OnInit
 {
     offer: Offer;
+    scores:JobApplication[]=[];
+    canApply:boolean=false;
     loading: boolean = true;
+    showScores:boolean=false;
     constructor(private route: ActivatedRoute, private companyService: CompanyService, public userService: UserService, private router: Router) { }
     async ngOnInit()
     {
         let offerId = this.route.snapshot.paramMap.get("id");
         let offer = await this.companyService.getOffer(offerId);
+        let now=new Date();
+        let deadline=new Date(offer.deadline);
+        this.showScores=now>deadline;
+        if(this.showScores)
+        {
+            this.scores=await this.companyService.getScores(offerId);
+        }
         this.loading = false;
         this.offer = offer;
+        this.canApply=deadline>=now;
     }
     formatDate(date: String): String
     {

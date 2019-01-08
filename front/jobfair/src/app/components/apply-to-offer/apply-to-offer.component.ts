@@ -17,6 +17,7 @@ export class ApplyToOfferComponent implements OnInit
     loading: boolean = true;
     errMsg: String;
     infoMsg: String;
+    canApply:boolean=false;
     application: JobApplication = {
 
     };
@@ -29,6 +30,9 @@ export class ApplyToOfferComponent implements OnInit
         let offerId = this.route.snapshot.paramMap.get("id");
         this.offer = await this.companyService.getOffer(offerId);
         this.loading = false;
+        let now=new Date();
+        let deadline=new Date(this.offer.deadline);
+        this.canApply=deadline>=now;
     }
     async fileChange(event: any)
     {

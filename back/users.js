@@ -2,6 +2,7 @@ var express = require("express");
 var crypto_utils = require("./crypto_utils");
 var ObjectId = require("mongodb").ObjectId;
 var getDb = require("./db").getDb;
+var getAdminConfig = require("./db").getAdminConfig;
 var router = require("express-promise-router")();
 
 
@@ -145,6 +146,16 @@ router.post("/login", async (req, res) =>
     await db.collection("tokens").insertOne(token);
     user.token = token.token;
     user.password = null;
+    let now = new Date();
+    if (!user.cvDeadline || user.cvDeadline > now)
+    {
+        user.canFillCV = true;
+    }
+    else
+    {
+        user.canFillCV = false;
+    }
+    user.cvDeadline = null;
     res.json({
         message: "OK",
         payload: user
@@ -206,7 +217,21 @@ router.post("/setcv", async (req, res) =>
         res.json({ message: validCV(body.payload) });
         return;
     }
-    await db.collection("users").updateOne({ username: user.username }, { $set: { "humanInfo.cv": body.payload } });
+    let cv = body.payload;
+    let cvDeadline = new Date();
+    let config = await getAdminConfig(db);
+    cvDeadline.setDate(config.cvDeadline + cvDeadline.getDate());
+    let now=new Date();
+    if(user.cvDeadline && user.cvDeadline<now)
+    {
+        res.json({message:"CV entry deadline has expired"});
+        return;
+    }
+    if (!user.cvDeadline || user.cvDeadline > cvDeadline)
+    {
+        user.cvDeadline = cvDeadline;
+    }
+    await db.collection("users").updateOne({ username: user.username }, { $set: { "humanInfo.cv": body.payload, "cvDeadline": user.cvDeadline } });
     res.json({ message: "OK" });
     return;
 });
@@ -248,7 +273,7 @@ router.post("/apply", async (req, res) =>
     let body = req.body;
     let db = await getDb();
     let user = await getUserByToken(body.token, db);
-    if(user.humanInfo.cv==null)
+    if (user.humanInfo.cv == null)
     {
         res.status(404);
         res.send("FAIL");
@@ -275,6 +300,14 @@ router.post("/apply", async (req, res) =>
         res.send("FAIL");
         return;
     }
+    let now = new Date();
+    let deadline = new Date(offer.deadline);
+    if (deadline < now)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
     let existingApplication = await db.collection("applications").findOne({
         offerId: application.offerId,
         username: user.username
@@ -286,9 +319,9 @@ router.post("/apply", async (req, res) =>
     }
     application.username = user.username;
     application.userLongName = user.humanInfo.firstName + " " + user.humanInfo.lastName;
-    application.companyName=offer.companyName;
-    application.status="Pending";
-    application.offerDescription=offer.description;
+    application.companyName = offer.companyName;
+    application.status = "Pending";
+    application.offerDescription = offer.description;
     await db.collection("applications").insertOne(application);
     res.json({ message: "OK" });
 });
@@ -303,9 +336,48 @@ router.post("/myapplications", async (req, res) =>
         res.send("FAIL");
         return;
     }
-    let applications=await db.collection("applications").find({username:user.username}).toArray();
-    res.json({message:"OK", payload:applications});
+    let applications = await db.collection("applications").find({ username: user.username }).toArray();
+    res.json({ message: "OK", payload: applications });
 })
+router.post("/rateapp", async (req, res) =>
+{
+    let body=req.body;
+    let db = await getDb();
+    let user = await getUserByToken(body.token, db);
+    if (user == null || user.kind != "human")
+    {
+        res.status(404);
+        res.send("FAIL1");
+        return;
+    }
+    let payload=body.payload;
+    if(payload.rating<1 || payload.rating>10)
+    {
+        res.status(404);
+        res.send("FAIL2");
+        return;
+    }
+    let appId=payload.appId;
+    let application=await db.collection("applications").findOne({_id:ObjectId(appId)});
+    if(application==null || application.username!=user.username || application.status!="Accepted")
+    {
+        res.status(404);
+        res.send("FAIL3");
+        return;
+    }
+    let now=new Date();
+    let stamp=application.timestamp;
+    stamp.setMonth(stamp.getMonth()+1);
+    if(now<stamp)
+    {
+        res.status(404);
+        res.send("FAIL4");
+        return;
+    }
+    await db.collection("applications").updateOne({_id:ObjectId(appId)}, {$set:{rating:payload.rating}});
+    res.json({message:"OK"})
+
+});
 
 exports.router = router;
 exports.getUserByName = getUserByName;

@@ -1,5 +1,5 @@
 <div class="spinner" *ngIf="loading"></div>
-
+<h2 *ngIf="!canApply" class="expired">Deadline has expired!!!</h2>
 <form #applyForm="ngForm" (ngSubmit)="apply()">
     <div class="form-horizontal">
         <h2 *ngIf="offer">Apply to {{offer?.description}}</h2>
@@ -23,7 +23,7 @@
         <h4>Your CV will automatically be sent along with the application</h4>
         <div class="form-group">
             <div class="col-md-10">
-                <input type="submit" [disabled]="!applyForm.form.valid" value="Apply" class="btn btn-default" />
+                <input type="submit" [disabled]="!applyForm.form.valid || !canApply" value="Apply" class="btn btn-default" />
             </div>
         </div>
     </div>

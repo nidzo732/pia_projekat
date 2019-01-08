@@ -7,8 +7,11 @@
     <div class="col-sm-3 prop-name application-description">
         {{application.companyName}}
     </div>
-    <div class="col-sm-4 application-description" [class.pending]="application.status=='Pending'" [class.accepted]="application.status=='Accepted'"
+    <div class="col-sm-3 application-description" [class.pending]="application.status=='Pending'" [class.accepted]="application.status=='Accepted'"
         [class.rejected]="application.status=='Rejected'">
         {{application.status}}
+    </div>
+    <div class="col-sm-3">
+        <app-rating-stars *ngIf="canRate()" (onRate)="rate($event)" [rating]="application.rating"></app-rating-stars>
     </div>
 </div>

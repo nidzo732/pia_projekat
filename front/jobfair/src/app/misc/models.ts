@@ -1,14 +1,16 @@
-export class HumanInfo {
+export class HumanInfo
+{
     firstName?: String;
     lastName?: String;
     email?: String;
     phone?: String;
     studyYear?: number;
     graduated?: boolean;
-    cvCreated?: Date;
     cv?: CV;
+    canFillCV?:boolean;
 }
-export class CompanyInfo {
+export class CompanyInfo
+{
     name?: String;
     city?: String;
     director?: String;
@@ -22,7 +24,8 @@ export class CompanyInfo {
     static areas: String[] = ["IT", "Telecom", "Power systems", "Civil egineering", "Architecture", "Mechanical engineering"];
 
 }
-export class File {
+export class File
+{
     static supportedIcons: String[] = [
         "aac.png",
         "ai.png",
@@ -92,32 +95,38 @@ export class File {
     name?: String;
     mimeType?: String;
     content64?: String;
-    static getIcon(file:File): String {
+    static getIcon(file: File): String
+    {
         let split = file.name.split(".");
         let name = "_blank.png";
-        if (split.length > 1) {
+        if (split.length > 1)
+        {
             let extension = split[split.length - 1];
-            let filename=extension+".png";
-            if(File.supportedIcons.indexOf(filename)!=-1)
+            let filename = extension + ".png";
+            if (File.supportedIcons.indexOf(filename) != -1)
             {
-                name=filename;
+                name = filename;
             }
         }
         return name;
     }
 }
-export class JobApplication{
-    _id?:String;
-    offerId?:String;
-    username?:String;
-    userLongName?:String;
-    companyName?:String;
-    status?:String;
-    offerDescription?:String;
-    coverLetterUpload?:File;
-    coverLetter?:String;
+export class JobApplication
+{
+    _id?: String;
+    offerId?: String;
+    username?: String;
+    userLongName?: String;
+    companyName?: String;
+    status?: String;
+    offerDescription?: String;
+    coverLetterUpload?: File;
+    coverLetter?: String;
+    timestamp?:String;
+    rating?:number;
 }
-export class Offer {
+export class Offer
+{
     _id?: String;
     description: String;
     longDescription?: String;
@@ -128,7 +137,13 @@ export class Offer {
     deadline?: Date
     static offerTypes: String[] = ["Job", "Internship"];
 }
-export class CV {
+export class AdminConfig
+{
+    cvDeadline?:number;
+    _id?:String;
+}
+export class CV
+{
     static applicationTypes: String[] = ["Job", "Internship"];
     type?: String;
     experience: { description?: String, from?: Date, to?: Date }[];
@@ -136,8 +151,10 @@ export class CV {
     skills: { description?: String }[];
     motherTongue?: String;
     languages: { description?: String }[];
+    deadline?:String;
 }
-export class User {
+export class User
+{
     username: String;
     password?: String = "";
     kind?: String;
@@ -146,4 +163,84 @@ export class User {
     token?: String;
     picture?: String;
     pictureUrl?: String;
+    admin?: boolean;
+}
+export class Fair
+{
+    Fair?:String;
+    StartDate?:String;
+    EndDate?:String;
+    StartTime?:String;
+    EndTime?:String;
+    Place?:String;
+    About?:String;
+    static validate(fair:Fair):boolean
+    {
+        if(!fair.Fair) return false;
+        if(!fair.StartDate) return false;
+        if(!fair.EndDate) return false;
+        if(!fair.StartTime) return false;
+        if(!fair.EndTime) return false;
+        if(!fair.Place) return false;
+        if(!fair.About) return false;
+        return true;
+    }
+}
+export class Location1
+{
+    Place?:String;
+    Location:Location2[];
+    static validate(l1:Location1):boolean
+    {
+        if(!l1.Place) return false;
+        if(!l1.Location) return false;
+        for(let i=0;i<l1.Location.length;i++)
+        {
+            if(!l1.Location[i]) return false;
+            if(!l1.Location[i].Name) return false;
+        }
+        return true;
+    }
+}
+export class Location2{
+    Name?:String;
+}
+export class FairJSON
+{
+    Fairs:Fair[];
+    Locations:Location1[];
+    static validate(json:FairJSON):boolean
+    {
+        if(!json.Fairs || !json.Locations) return false;
+        for(let i=0;i<json.Fairs.length;i++)
+        {
+            if(!Fair.validate(json.Fairs[i])) return false;
+        }
+        for(let i=0;i<json.Locations.length;i++)
+        {
+            if(!Location1.validate(json.Locations[i])) return false;
+        }
+        return true;
+    }
+}
+export class Package
+{
+    Title:String;
+    Content:String[];
+    VideoPromotion:String;
+    NoLessons:number;
+    NoWorkchops:number;
+    NoPresentation:number;
+    Price:number;
+    MaxCompanies:number;
+}
+export class Addition
+{
+    Title:String;
+    Price:number;
+}
+export class PackagesJSON
+{
+    Packages:Package[];
+    Additional:Addition[];
 }

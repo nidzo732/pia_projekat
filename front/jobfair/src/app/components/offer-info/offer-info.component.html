@@ -4,31 +4,43 @@
 <img [src]="userService.getPictureUrl(offer?.company)" class="main-img">
 <div class="row">
     <div class="col-sm-3 prop-name">
-      Type
+        Type
     </div>
     <div class="col-sm-4">
-      {{offer?.type}}
+        {{offer?.type}}
     </div>
-  </div>
-  <div class="row">
-      <div class="col-sm-3 prop-name">
+</div>
+<div class="row">
+    <div class="col-sm-3 prop-name">
         Deadline
-      </div>
-      <div class="col-sm-4">
+    </div>
+    <div class="col-sm-4">
         {{formatDate(offer?.deadline)}}
-      </div>
     </div>
-    <div class="row">
-      <div class="col-sm-8 col-sm-offset-2">
-        <button class="btn btn-default apply-btn" (click)="apply()" *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">Apply</button>
+</div>
+<div class="row">
+    <div class="col-sm-8 col-sm-offset-2">
+        <button class="btn btn-default apply-btn" [disabled]="!canApply" (click)="apply()" *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">Apply</button>
         <button class="btn btn-default apply-btn" (click)="listApplications()" *ngIf="canListApplications()">Applications</button>
-      </div>
     </div>
+</div>
 <h2>Details</h2>
 <p class="long-description">
-  {{offer?.longDescription}}
+    {{offer?.longDescription}}
 </p>
 <h2>Attachments</h2>
 <a href="{{getFileUrl(file)}}" *ngFor="let file of offer?.files">
     <app-file-list-item [file]="file"></app-file-list-item>
 </a>
+
+<h2 *ngIf="showScores">Scores</h2>
+
+<div class="application-list-item row" *ngFor="let score of scores">
+    <div class="col-sm-3 prop-name application-description">
+        {{score.userLongName}}
+    </div>
+    <div class="col-sm-4 application-description" [class.pending]="score.status=='Pending'" [class.accepted]="score.status=='Accepted'"
+        [class.rejected]="score.status=='Rejected'">
+        {{score.status}}
+    </div>
+</div>

@@ -1,6 +1,139 @@
-<h2>{{application.userLongName}}</h2>
 <div class="spinner" *ngIf="loading"></div>
+<h2>{{application.userLongName}}</h2>
+<h4 [class.pending]="application?.status=='Pending'" [class.accepted]="application?.status=='Accepted'"
+    [class.rejected]="application?.status=='Rejected'">
+    {{application?.status}}
+</h4>
+<div class="row">
+    <div class="col-sm-3">
+        <button class="btn btn-default" type="button" (click)="accept()">Accept</button>
+    </div>
+    <div class="col-sm-3">
+        <button class="btn btn-default" type="button" (click)="reject()">Reject</button>
+    </div>
+    <div class="col-sm-6"></div>
+</div><br/>
+
 <img [src]="userService.getPictureUrl(application?.username)" class="main-img">
+<h3>Basic information</h3>
+<div class="row">
+    <div class="col-sm-3 prop-name">
+        First Name
+    </div>
+    <div class="col-sm-4">
+        {{applicant?.humanInfo.firstName}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3 prop-name">
+        Last name
+    </div>
+    <div class="col-sm-4">
+        {{applicant?.humanInfo.lastName}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3 prop-name">
+        Email
+    </div>
+    <div class="col-sm-4">
+        <a href="mailto:{{applicant?.humanInfo.email}}">{{applicant?.humanInfo.email}}</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3 prop-name">
+        Mother tongue
+    </div>
+    <div class="col-sm-4">
+        {{applicant?.humanInfo.cv.motherTongue}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3 prop-name">
+        Year of studies
+    </div>
+    <div class="col-sm-4">
+        {{applicant?.humanInfo.studyYear}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3 prop-name">
+        Graduated
+    </div>
+    <div class="col-sm-4" *ngIf="applicant?.humanInfo.graduated">
+        Yes
+    </div>
+    <div class="col-sm-4" *ngIf="!(applicant?.humanInfo.graduated)">
+        No
+    </div>
+</div>
+<h3>Experience</h3>
+<div class="row">
+    <div class="col-sm-3">
+        Experience
+    </div>
+    <div class="col-sm-4">
+        From
+    </div>
+    <div class="col-sm-4">
+        To
+    </div>
+</div>
+
+<div class="row" *ngFor="let experience of applicant?.humanInfo.cv.experience">
+    <div class="col-sm-3 prop-name">
+        {{experience.description}}
+    </div>
+    <div class="col-sm-4">
+        {{experience.from}}
+    </div>
+    <div class="col-sm-4">
+        {{experience.to}}
+    </div>
+</div>
+
+<h3>Education</h3>
+<div class="row">
+    <div class="col-sm-3">
+        Education
+    </div>
+    <div class="col-sm-4">
+        From
+    </div>
+    <div class="col-sm-4">
+        To
+    </div>
+</div>
+
+<div class="row" *ngFor="let education of applicant?.humanInfo.cv.education">
+    <div class="col-sm-3 prop-name">
+        {{education.description}}
+    </div>
+    <div class="col-sm-4">
+        {{education.from}}
+    </div>
+    <div class="col-sm-4">
+        {{education.to}}
+    </div>
+</div>
+
+<h3>Languages</h3>
+<div class="row">
+    <ul>
+        <li *ngFor="let language of applicant?.humanInfo.cv.languages">
+            {{language.description}}
+        </li>
+    </ul>
+</div>
+<h3>Skills</h3>
+<div class="row">
+    <ul>
+        <li *ngFor="let skill of applicant?.humanInfo.cv.skills">
+            {{skill.description}}
+        </li>
+    </ul>
+</div>
+
 <h3 *ngIf="application.coverLetter">Cover letter</h3>
 <p class="motivational-letter-text" *ngIf="application.coverLetter">
     {{application.coverLetter}}

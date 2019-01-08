@@ -10,7 +10,7 @@ import { FileLoader } from 'src/app/misc/fileLoader';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
-  user:User={username:"",companyInfo:{}, humanInfo:{}, kind:"human"};
+  user:User={username:"",companyInfo:{}, humanInfo:{graduated:false}, kind:"human"};
   pictUrlDummy:any;
   errMsg:String;
   availableAreas:String[];

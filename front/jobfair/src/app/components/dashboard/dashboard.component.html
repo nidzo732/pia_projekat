@@ -1,26 +1,55 @@
 <h2>Companies, jobs, and internships</h2>
 <div class="row">
-  <div class="col-sm-4">
-    <input type="text" class="form-control" placeholder="Name" (change)="reSearch()" [(ngModel)]="name">
-  </div>
-  <div class="col-sm-4">
-    <input type="text" class="form-control" placeholder="City" (change)="reSearch()" [(ngModel)]="city">
-  </div>
-  <div class="col-sm-4">
-      <select class="form-control" id="sel1" multiple (change)="reSearch()" [(ngModel)]="areas">
-        <option *ngFor="let area of availableAreas" [value]="area">{{area}}</option>
-      </select>
+    <div class="col-sm-3">
+        <input type="text" class="form-control" placeholder="Company name" (change)="reSearch()" [(ngModel)]="name">
+    </div>
+    <div class="col-sm-3" *ngIf="kind=='companies'">
+        <input type="text" class="form-control" placeholder="City" (change)="reSearch()" [(ngModel)]="city">
+    </div>
+    <div class="col-sm-3" *ngIf="kind=='companies'">
+        <select class="form-control" id="sel1" multiple (change)="reSearch()" [(ngModel)]="areas">
+            <option *ngFor="let area of availableAreas" [value]="area">{{area}}</option>
+        </select>
+    </div>
+
+    <div class="col-sm-3" *ngIf="kind=='offers'">
+        <input type="text" class="form-control" placeholder="Job name" (change)="reSearch()" [(ngModel)]="jobName">
+    </div>
+    <div class="col-sm-3" *ngIf="kind=='offers'">
+        <select class="form-control" id="sel2" (change)="reSearch()" [(ngModel)]="selectedOfferType">
+            <option *ngFor="let offerType of offerTypes" [value]="offerType">{{offerType}}</option>
+        </select>
+    </div>
+
+    <div class="col-sm-3">
+        <label class="radio-inline">
+            <input type="radio" [(ngModel)]="kind" (change)="reSearch()" [value]="'companies'" checked>Companies
+        </label>
+        <label class="radio-inline">
+            <input type="radio" [(ngModel)]="kind" (change)="reSearch()" [value]="'offers'">Offers
+        </label>
     </div>
 </div>
 <div class="spinner" *ngIf="loading"></div>
 <div class="company-list-item" id="company-item-@item.Id" *ngFor="let company of companies">
-  <div class="company-list-item-inner">
-    <a routerLink="/company/{{company.username}}">
-      <p class="company-list-item-name">{{company.name}}</p>
-    </a>
-    <p style="width:100%;text-align:center">{{company.area}}</p>
-    <p style="width:100%;text-align:center">{{company.city}}</p>
-    <hr class="company-list-item-inner-sep" />
-    <a routerLink="/company/{{company.username}}"><img class="company-list-item-picture" [src]="userService.getPictureUrl(company.username)" /></a>
-  </div>
+    <div class="company-list-item-inner">
+        <a routerLink="/company/{{company.username}}">
+            <p class="company-list-item-name">{{company.name}}</p>
+        </a>
+        <p style="width:100%;text-align:center">{{company.area}}</p>
+        <p style="width:100%;text-align:center">{{company.city}}</p>
+        <hr class="company-list-item-inner-sep" />
+        <a routerLink="/company/{{company.username}}"><img class="company-list-item-picture" [src]="userService.getPictureUrl(company.username)" /></a>
+    </div>
+</div>
+<div class="company-list-item" id="company-item-@item.Id" *ngFor="let offer of offers">
+    <div class="company-list-item-inner">
+        <a routerLink="/offerinfo/{{offer._id}}">
+            <p class="company-list-item-name">{{offer.description}}</p>
+        </a>
+        <p style="width:100%;text-align:center">{{offer.companyName}}</p>
+        <p style="width:100%;text-align:center">{{formatDate(offer.deadline)}}</p>
+        <hr class="company-list-item-inner-sep" />
+        <a routerLink="/offerinfo/{{offer._id}}"><img class="company-list-item-picture" [src]="userService.getPictureUrl(offer.company)" /></a>
+    </div>
 </div>

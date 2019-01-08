@@ -13,6 +13,10 @@ const getOfferUrl = siteUrl + "/company/offer";
 const getApplicationsUrl = siteUrl + "/company/applications";
 const getApplicationUrl = siteUrl + "/company/application";
 const getCoverLetterUrl = siteUrl + "/company/coverletter";
+const getApplicantInfoUrl = siteUrl+"/company/applicantinfo";
+const applicationStatusUrl=siteUrl+"/company/applicationstatus";
+const detailSearchOffersUrl=siteUrl+"/company/searchoffers";
+const scoresUrl=siteUrl+"/company/scores";
 
 @Injectable({
     providedIn: 'root'
@@ -76,6 +80,32 @@ export class CompanyService
     async getCoverLetter(id:String):Promise<File>
     {
         let response=await this.httpService.doPostForObject(getCoverLetterUrl, {id:id});
+        return response.payload;
+    }
+    async getApplicantInfo(id:String):Promise<User>
+    {
+        let response=await this.httpService.doPostForObject(getApplicantInfoUrl, {id:id});
+        return response.payload;
+    }
+    async postApplicationStatus(id:String, accepted:boolean):Promise<String>{
+        let response=await this.httpService.doPostForString(applicationStatusUrl, {id:id, accepted:accepted});
+        return response;
+    }
+    async detailedSearchOffers(companyName:String, jobName:String, type:String):Promise<Offer[]>
+    {
+        if(!companyName) companyName=" ";
+        if(!jobName) jobName=" ";
+        if(!type) type=" ";
+        companyName=encodeURIComponent(companyName.toString());
+        jobName=encodeURIComponent(jobName.toString());
+        type=encodeURIComponent(type.toString());
+        let url = detailSearchOffersUrl + "/" + companyName + "/" + jobName + "/" + type;
+        let response=await this.httpService.doGetForObject(url);
+        return response.payload;
+    }
+    async getScores(offerId:String):Promise<JobApplication[]>
+    {
+        let response = await this.httpService.doGetForObject(scoresUrl+"/"+offerId);
         return response.payload;
     }
 }

@@ -21,6 +21,9 @@ import { ApplicationListItemComponent } from './components/application-list-item
 import { ApplicationsForOfferComponent } from './components/applications-for-offer/applications-for-offer.component';
 import { FileListItemComponent } from './components/file-list-item/file-list-item.component';
 import { ApplicationInfoComponent } from './components/application-info/application-info.component';
+import { FairEntryComponent } from './components/fair-entry/fair-entry.component';
+import { AdminConfigComponent } from './components/admin-config/admin-config.component';
+import { RatingStarsComponent } from './components/rating-stars/rating-stars.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +43,10 @@ import { ApplicationInfoComponent } from './components/application-info/applicat
     ApplicationListItemComponent,
     ApplicationsForOfferComponent,
     FileListItemComponent,
-    ApplicationInfoComponent
+    ApplicationInfoComponent,
+    FairEntryComponent,
+    AdminConfigComponent,
+    RatingStarsComponent
   ],
   imports: [
     BrowserModule,

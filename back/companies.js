@@ -29,9 +29,32 @@ router.get("/search/:name/:city/:area", async (req, res) =>
     res.json({ "message": "OK", payload: result });
 })
 
+router.get("/searchoffers/:cname/:jname/:kind", async (req, res) =>
+{
+    let query = { };
+    let cname = req.params.cname;
+    let jname = req.params.jname;
+    let kind = req.params.kind;
+    if (cname && cname.trim())
+    {
+        query["companyName"] = { $regex: cname.trim(), $options: "i" };
+    }
+    if (jname && jname.trim())
+    {
+        query["description"] = { $regex: jname.trim(), $options: "i" };
+    }
+    if (kind && kind.trim())
+    {
+        query["type"] = kind;
+    }
+    let db = await getDb();
+    let result = await db.collection("offers").find(query,
+        { projection: { files: 0 } }).sort({ deadline: -1 }).toArray();
+    res.json({ "message": "OK", payload: result });
+})
+
 router.get("/details/:name", async (req, res) =>
 {
-
     let name = req.params.name;
     let db = await getDb();
     let result = await db.collection("users").findOne({ username: name, kind: "company" },
@@ -83,28 +106,18 @@ router.post("/newoffer", async (req, res) =>
     res.json({ "message": "OK" });
 
 });
-function getIsoNow()
-{
-    let now = new Date();
-    let year = now.getFullYear();
-    let month = "" + (now.getMonth() + 1);
-    while (month.length < 2) month = "0" + month;
-    let day = "" + now.getDate();
-    while (day.length < 2) day = "0" + day;
-    return year + "-" + month + "-" + day;
-}
 
 router.get("/offers/:company?", async (req, res) =>
 {
     let db = await getDb();
     let company = req.params.company;
-    let query = { deadline: { $gte: getIsoNow() } };
+    let query = {};
 
     if (company)
     {
         query["company"] = company;
     }
-    let result = await db.collection("offers").find(query, { projection: { "files.content64": 0 } }).toArray();
+    let result = await db.collection("offers").find(query, { projection: { "files.content64": 0 } }).sort({ deadline: -1 }).toArray();
     res.json({ message: "OK", payload: result });
 
 })
@@ -142,80 +155,185 @@ router.get("/offerfile/:offerid/:fileindex", async (req, res) =>
 
 })
 
-router.post("/applications", async (req, res)=>{
+router.post("/applications", async (req, res) =>
+{
     let db = await getDb();
-    let body=req.body;
-    let user=await users.getUserByToken(body.token, db);
-    if(!user || user.kind!="company")
+    let body = req.body;
+    let user = await users.getUserByToken(body.token, db);
+    if (!user || user.kind != "company")
     {
         res.status(404);
         res.send("FAIL");
         return;
     }
     let offerId = req.body.payload.offerId;
-    let offer=await db.collection("offers").findOne({_id:ObjectId(offerId)});
-    if(!offer || offer.company!=user.username)
+    let offer = await db.collection("offers").findOne({ _id: ObjectId(offerId) });
+    if (!offer || offer.company != user.username)
     {
         res.status(404);
         res.send("FAIL");
         return;
     }
-    let applications = await db.collection("applications").find({offerId:offerId}, { projection: { "coverLetterUpload.content64":0 } }).toArray();
-    res.json({message:"OK", payload:applications});
+    let applications = await db.collection("applications").find({ offerId: offerId }, { projection: { "coverLetterUpload.content64": 0 } }).toArray();
+    res.json({ message: "OK", payload: applications });
 });
-router.post("/application", async (req, res)=>{
+
+router.get("/scores/:id", async (req, res) =>
+{
     let db = await getDb();
-    let body=req.body;
-    let user=await users.getUserByToken(body.token, db);
-    if(!user || user.kind!="company")
+    let offerId = req.params.id;
+    let offer = await db.collection("offers").findOne({ _id: ObjectId(offerId) });
+    if (!offer)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let applications = await db.collection("applications").find({ offerId: offerId }, 
+        { projection: { "coverLetterUpload": 0, "coverLetter":0 } }).toArray();
+    res.json({ message: "OK", payload: applications });
+});
+router.post("/application", async (req, res) =>
+{
+    let db = await getDb();
+    let body = req.body;
+    let user = await users.getUserByToken(body.token, db);
+    if (!user || user.kind != "company")
     {
         res.status(404);
         res.send("FAIL");
         return;
     }
     let id = req.body.payload.id;
-    let application=await db.collection("applications").findOne({_id:ObjectId(id)}, { projection: { "coverLetterUpload.content64":0 } });
-    if(!application)
+    let application = await db.collection("applications").findOne({ _id: ObjectId(id) }, { projection: { "coverLetterUpload.content64": 0 } });
+    if (!application)
     {
         res.status(404);
         res.send("FAIL");
         return;
     }
-    let offer = await db.collection("offers").findOne({_id:ObjectId(application.offerId)});
-    if(!offer || offer.company!=user.username)
+    let offer = await db.collection("offers").findOne({ _id: ObjectId(application.offerId) });
+    if (!offer || offer.company != user.username)
     {
         res.status(404);
         res.send("FAIL");
         return;
     }
-    res.json({message:"OK", payload:application});
+    res.json({ message: "OK", payload: application });
 });
-router.post("/coverletter", async (req, res)=>{
+router.post("/coverletter", async (req, res) =>
+{
     let db = await getDb();
-    let body=req.body;
-    let user=await users.getUserByToken(body.token, db);
-    if(!user || user.kind!="company")
+    let body = req.body;
+    let user = await users.getUserByToken(body.token, db);
+    if (!user || user.kind != "company")
     {
         res.status(404);
         res.send("FAIL");
         return;
     }
     let id = req.body.payload.id;
-    let application=await db.collection("applications").findOne({_id:ObjectId(id)});
-    if(!application || !application.coverLetterUpload)
+    let application = await db.collection("applications").findOne({ _id: ObjectId(id) });
+    if (!application || !application.coverLetterUpload)
     {
         res.status(404);
         res.send("FAIL");
         return;
     }
-    let offer = await db.collection("offers").findOne({_id:ObjectId(application.offerId)});
-    if(!offer || offer.company!=user.username)
+    let offer = await db.collection("offers").findOne({ _id: ObjectId(application.offerId) });
+    if (!offer || offer.company != user.username)
     {
         res.status(404);
         res.send("FAIL");
         return;
     }
-    res.json({message:"OK", payload:application.coverLetterUpload});
+    res.json({ message: "OK", payload: application.coverLetterUpload });
+});
+
+router.post("/applicantinfo", async (req, res) =>
+{
+    let db = await getDb();
+    let body = req.body;
+    let user = await users.getUserByToken(body.token, db);
+    if (!user || user.kind != "company")
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let id = req.body.payload.id;
+    let application = await db.collection("applications").findOne({ _id: ObjectId(id) });
+    if (!application)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let offer = await db.collection("offers").findOne({ _id: ObjectId(application.offerId) });
+    if (!offer || offer.company != user.username)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let applicant = await db.collection("users").findOne({ username: application.username },
+        {
+            projection:
+            {
+                "username": 1,
+                "humanInfo.firstName": 1,
+                "humanInfo.lastName": 1,
+                "humanInfo.email": 1,
+                "humanInfo.phone": 1,
+                "humanInfo.studyYear": 1,
+                "humanInfo.graduated": 1,
+                "humanInfo.cv": 1,
+            }
+        }
+    );
+    res.json({ message: "OK", payload: applicant });
+});
+
+router.post("/applicationstatus", async (req, res) =>
+{
+    let db = await getDb();
+    let body = req.body;
+    let user = await users.getUserByToken(body.token, db);
+    if (!user || user.kind != "company")
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let id = req.body.payload.id;
+    let accepted = req.body.payload.accepted;
+    let application = await db.collection("applications").findOne({ _id: ObjectId(id) });
+    if (!application)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let offer = await db.collection("offers").findOne({ _id: ObjectId(application.offerId) });
+    if (!offer || offer.company != user.username)
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    if (accepted)
+    {
+        application.status = "Accepted";
+    }
+    else
+    {
+        application.status = "Rejected";
+    }
+    application.timestamp=new Date();
+    await db.collection("applications").updateOne(
+        { _id: application._id },
+        { $set: { status: application.status, timestamp:application.timestamp } });
+    res.json({ message: "OK" });
 });
 
 exports.router = router;

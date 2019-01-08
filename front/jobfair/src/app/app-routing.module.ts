@@ -17,6 +17,9 @@ import { MyApplicationsComponent } from './components/my-applications/my-applica
 import { MyOffersComponent } from './components/my-offers/my-offers.component';
 import { ApplicationsForOfferComponent } from './components/applications-for-offer/applications-for-offer.component';
 import { ApplicationInfoComponent } from './components/application-info/application-info.component';
+import { FairEntryComponent } from './components/fair-entry/fair-entry.component';
+import { AdminOnlyGuard } from './guards/admin-only.guard';
+import { AdminConfigComponent } from './components/admin-config/admin-config.component';
 
 const routes: Routes = [
     { path: "login", component: LoginComponent },
@@ -37,6 +40,8 @@ const routes: Routes = [
     { path: "setpassword", canActivate: [LoginGuard], component: SetPasswordComponent },
     { path: "cventry", component: CvEntryComponent, canActivate: [OnlyHumanGuard] },
     { path: "offerentry", component: OfferentryComponent, canActivate: [OnlyCompanyGuard] },
+    { path: "fairentry", component: FairEntryComponent, canActivate: [AdminOnlyGuard] },
+    { path: "adminconfig", component: AdminConfigComponent, canActivate: [AdminOnlyGuard] }
 ];
 
 @NgModule({

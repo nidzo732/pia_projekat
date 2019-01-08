@@ -12,6 +12,7 @@ const setCVUrl = siteUrl + "/user/setcv";
 const pictureUrl = siteUrl + "/user/picture";
 const applyToOfferUrl = siteUrl + "/user/apply";
 const myApplicationsUrl=siteUrl+"/user/myapplications";
+const rateApplicationUrl=siteUrl+"/user/rateapp";
 
 @Injectable({
     providedIn: 'root'
@@ -33,7 +34,20 @@ export class UserService
     }
     currentUser(): User
     {
-        if (!localStorage["userObject"]) return null;
+        if (!localStorage["userObject"])
+        {
+            return {
+                admin:false,
+                companyInfo:{
+                    
+                },
+                humanInfo:{
+
+                },
+                kind:"none",
+                username:"none"
+            }
+        }
         return JSON.parse(localStorage["userObject"]);
     }
     async logOut()
@@ -75,6 +89,10 @@ export class UserService
     async getMyApplications(): Promise<JobApplication[]>
     {
         return (await this.httpService.doPostForObject(myApplicationsUrl, {})).payload;
+    }
+    async rateApplication(id:String, rating:number):Promise<String>
+    {
+        return await this.httpService.doPostForString(rateApplicationUrl, {appId:id, rating:rating});
     }
     constructor(private httpService: HttpService)
     {
