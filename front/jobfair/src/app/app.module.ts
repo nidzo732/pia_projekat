@@ -24,6 +24,9 @@ import { ApplicationInfoComponent } from './components/application-info/applicat
 import { FairEntryComponent } from './components/fair-entry/fair-entry.component';
 import { AdminConfigComponent } from './components/admin-config/admin-config.component';
 import { RatingStarsComponent } from './components/rating-stars/rating-stars.component';
+import { FairsComponent } from './components/fairs/fairs.component';
+import { FairComponent } from './components/fair/fair.component';
+import { FairApplicationComponent } from './components/fair-application/fair-application.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +49,10 @@ import { RatingStarsComponent } from './components/rating-stars/rating-stars.com
     ApplicationInfoComponent,
     FairEntryComponent,
     AdminConfigComponent,
-    RatingStarsComponent
+    RatingStarsComponent,
+    FairsComponent,
+    FairComponent,
+    FairApplicationComponent
   ],
   imports: [
     BrowserModule,

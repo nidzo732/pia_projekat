@@ -1,10 +1,265 @@
 <h2>New fair</h2>
+<div class="spinner" *ngIf="loading"></div>
+<h3 *ngIf="step==3">Confirmation</h3>
+<p class="errmsg" *ngIf="errMsg">{{errMsg}}</p>
+<p *ngIf="infoMsg">{{infoMsg}}</p>
+<div *ngIf="step==0 || step==3">
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Upload fair json</label>
+                <input [readonly]="allReadonly" class="form-control" *ngIf="step==0" type="file" (change)="json1Change($event)" />
+            </div>
+        </div>
+    </div>
+    <h3>Fair</h3>
+    <div class="row" *ngFor="let fair of fair.Fairs">
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Fair name</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="fair.Fair" placeholder="Fair name" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Start Date</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="fair.StartDate" placeholder="Start date"
+                    type="date" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>End Date</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="fair.EndDate" placeholder="End date"
+                    type="date" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Start Time</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="fair.StartTime" placeholder="Start time"
+                    type="time" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>End Time</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="fair.EndTime" placeholder="End time"
+                    type="time" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Application deadline</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="fair.Deadline" placeholder="Application deadline"
+                    type="date" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Place</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="fair.Place" placeholder="Place" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Details</label>
+                <textarea [readonly]="allReadonly" class="form-control" [(ngModel)]="fair.About" placeholder="Details"></textarea>
+            </div>
+        </div>
+    </div>
+    <h3>Locations</h3>
+    <div class="row" *ngFor="let location of fair.Locations">
+        <div class="form-group row">
+            <div class="col-md-10">
+                <label>Place</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="location.Place" placeholder="Place" />
+            </div>
+        </div><br />
+        <h4>Locations, again</h4>
+        <div class="form-group row" *ngFor="let location of location.Location">
+            <div class="col-sm-6">
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="location.Name" placeholder="Name" />
+            </div>
+            <div class="col-sm-4">
+                <button [disabled]="allReadonly" type="button" class="btn btn-default" (click)="removeLocation(location)">Remove</button>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-sm-10">
+                <button [disabled]="allReadonly" type="button" class="btn btn-default" (click)="addNameToLocation(location)">Add</button>
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="step==0">
+        <div class="col-sm-6">
 
-<div class="row" *ngIf="step==0">
-    <div class="form-group">
-        <div class="col-md-10">
-            <label>Upload fair json</label>
-            <input class="form-control" type="file" (change)="json1Change($event)" />
+        </div>
+        <div class="col-sm-6">
+            <button [disabled]="allReadonly" type="button" class="btn btn-default nextbtn" (click)="goto1()">Next</button>
+        </div>
+    </div>
+</div>
+<div *ngIf="step==1 || step==3">
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Logo</label>
+                <input [readonly]="allReadonly" class="form-control" *ngIf="step==1" type="file" (change)="logoChange($event)"
+                    accept="image/*" />
+            </div>
+        </div>
+    </div>
+    <img [src]="logoSrc" class="fair-logo" />
+    <h3>Events</h3>
+    <div class="form-group row" *ngFor="let event of fair.Events">
+        <div class="col-sm-3">
+            <input [readonly]="allReadonly" class="form-control" [(ngModel)]="event.description" placeholder="Description" />
+        </div>
+        <div class="col-sm-3">
+            <input [readonly]="allReadonly" class="form-control" [(ngModel)]="event.date" placeholder="Date" type="date" />
+        </div>
+        <div class="col-sm-3">
+            <input [readonly]="allReadonly" class="form-control" [(ngModel)]="event.time" placeholder="Time" type="time" />
+        </div>
+        <div class="col-sm-2">
+            <select [disabled]="allReadonly" class="form-control" [(ngModel)]="event.location">
+                <option *ngFor="let l of fair.Locations[0].Location">{{l.Name}}</option>
+            </select>
+        </div>
+        <div class="col-sm-1">
+            <button [disabled]="allReadonly" type="button" class="btn btn-default" (click)="removeEvent(event)">Remove</button>
+        </div>
+    </div>
+    <button [disabled]="allReadonly" type="button" class="btn btn-default" (click)="addEvent()">Add</button>
+    <div class="row">
+        <div class="col-sm-6">
+            <button [disabled]="allReadonly" type="button" class="btn btn-default nextbtn" (click)="back()">Back</button>
+        </div>
+        <div class="col-sm-6">
+            <button [disabled]="allReadonly" type="button" class="btn btn-default nextbtn" (click)="goto2()">Next</button>
+        </div>
+    </div>
+</div>
+<div *ngIf="step==2 || step==3">
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Upload packages json</label>
+                <input [readonly]="allReadonly" class="form-control" *ngIf="step==2" type="file" (change)="json2Change($event)" />
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngFor="let package of packages.Packages">
+        <hr />
+        <h3>Package</h3>
+        <button [disabled]="allReadonly" type="button" class="btn btn-default" (click)="removePackage(package)">Remove</button>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Title</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.Title" placeholder="Title" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Video promotion length</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.VideoPromotion" placeholder="Video promotion length"
+                    type="number" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Number of lessons</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.NoLessons" placeholder="Number of lessons"
+                    type="number" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Number of workshops</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.NoWorkchops" placeholder="Number of workshops"
+                    type="number" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Number of presentations</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.NoPresentation" placeholder="Number of presentations"
+                    type="number" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Price</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.Price" placeholder="Price"
+                    type="number" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Max companies</label>
+                <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.MaxCompanies" placeholder="Max companies"
+                    type="number" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <label>Content</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <div class="row" *ngFor="let content of package.tmpContent; let i = index;">
+                    <div class="col-sm-8">
+                        <input [readonly]="allReadonly" class="form-control" [(ngModel)]="content.value" placeholder="Content" />
+                    </div>
+                    <div class="col-sm-4">
+                        <button [disabled]="allReadonly" type="button" class="btn btn-default" (click)="deleteContent(package,i)">Remove</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-10">
+                <button [disabled]="allReadonly" type="button" class="btn btn-default" (click)="addContent(package)">Add</button>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <hr />
+        <button [disabled]="allReadonly" type="button" class="btn btn-default" (click)="addPackage()">Add</button>
+    </div>
+    <h3>Additions</h3>
+    <div class="row" *ngFor="let addition of packages.Additional">
+        <div class="col-sm-8">
+            <input [readonly]="allReadonly" class="form-control addition-title" [(ngModel)]="addition.Title"
+                placeholder="Title" />
+        </div>
+        <div class="col-sm-2">
+            <input [readonly]="allReadonly" class="form-control" [(ngModel)]="addition.Price" placeholder="Price" type="number" />
+        </div>
+        <div class="col-sm-2">
+            <button [disabled]="allReadonly" type="button" class="btn btn-default nextbtn" (click)="removeAddition(addition)">Remove</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <button [disabled]="allReadonly" type="button" class="btn btn-default nextbtn" (click)="back()">Back</button>
+        </div>
+        <div class="col-sm-6">
+            <button [disabled]="allReadonly" type="button" class="btn btn-default nextbtn" (click)="goto3()">Next</button>
+        </div>
+    </div>
+</div>
+<div *ngIf="step==3">
+    <div class="row">
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default nextbtn" (click)="back()">Back</button>
+        </div>
+        <div class="col-sm-6">
+            <button type="button" class="btn btn-default nextbtn" (click)="doSubmit()">Submit</button>
         </div>
     </div>
 </div>

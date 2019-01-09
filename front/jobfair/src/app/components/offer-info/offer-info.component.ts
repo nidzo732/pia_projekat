@@ -38,7 +38,7 @@ export class OfferInfoComponent implements OnInit
     {
         if (date)
         {
-            return (new Date(date.toString())).toDateString();
+            return (new Date(date.toString())).toLocaleDateString();
         }
         else
         {

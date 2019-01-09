@@ -1,0 +1,11 @@
+.main-img{
+    max-width: 40%;
+    max-height: 400px;
+}
+.long-description{
+    white-space:pre-wrap;
+}
+.pack-name{
+    font-weight: bold;
+    font-size: 120%;
+}

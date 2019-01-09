@@ -17,7 +17,7 @@ export class OfferListItemComponent implements OnInit
 
     formatDate(date: String): String
     {
-        return (new Date(date.toString())).toDateString();
+        return (new Date(date.toString())).toLocaleDateString();
     }
 
 }

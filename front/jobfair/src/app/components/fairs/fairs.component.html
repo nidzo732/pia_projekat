@@ -1,0 +1,13 @@
+<h2>Fairs</h2>
+<div class="spinner" *ngIf="loading"></div>
+<div class="fair-list-item" id="fair-item-@item.Id" *ngFor="let fair of fairs">
+    <div class="fair-list-item-inner">
+        <a routerLink="/fair/{{fair._id}}">
+            <p class="fair-list-item-name">{{fair.Fairs[0].Fair}}</p>
+        </a>
+        <p style="width:100%;text-align:center"></p>
+        <p style="width:100%;text-align:center"></p>
+        <hr class="fair-list-item-inner-sep" />
+        <a routerLink="/fair/{{fair._id}}"><img class="fair-list-item-picture" [src]="getPictureUrl(fair)" /></a>
+    </div>
+</div>

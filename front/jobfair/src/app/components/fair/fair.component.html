@@ -1,0 +1,74 @@
+<div class="spinner" *ngIf="loading"></div>
+<h2>{{fair.Fair}}</h2>
+<img [src]="imgSrc" class="main-img">
+<div class="row">
+    <button type="button" class="btn btn-default" *ngIf="canApply()">Apply</button>
+    <button type="button" class="btn btn-default" *ngIf="canEdit()" (click)="edit()">Edit</button>
+</div>
+<div class="row">
+    <div class="col-sm-3 prop-name">
+        From
+    </div>
+    <div class="col-sm-4">
+        {{formatDate(fair.StartDate)}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3 prop-name">
+        To
+    </div>
+    <div class="col-sm-4">
+        {{formatDate(fair.EndDate)}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3 prop-name">
+        Place
+    </div>
+    <div class="col-sm-4">
+        {{fair.Place}}
+    </div>
+</div>
+<br /><br />
+<p class="long-description">
+    {{fair.About}}
+</p>
+<h3>Events</h3>
+<div class="row" *ngFor="let event of fairj?.Events">
+    <div class="col-sm-3 prop-name">
+        {{event.description}}
+    </div>
+    <div class="col-sm-3">
+        {{formatDate(event.date)}}
+    </div>
+    <div class="col-sm-3">
+        {{formatTime(event.time)}}
+    </div>
+    <div class="col-sm-3">
+        {{event.location}}
+    </div>
+</div>
+<div *ngIf="showPackages()">
+    <h2>Packages</h2>
+    <ul>
+        <li *ngFor="let package of fairj?.packages.Packages">
+            <span class="pack-name">{{package.Title}}</span>
+            <ul>
+                <li>Video promotion length: {{package.VideoPromotion}} minutes</li>
+                <li>Lessons: {{package.NoLessons}}</li>
+                <li>Workshops: {{package.NoWorkchops}}</li>
+                <li>Presentations: {{package.NoPresentation}}</li>
+                <li>Price: {{package.Price}} EUR</li>
+                <li *ngFor="let c of package.Content">
+                    {{c}}
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <h2>Addtional options</h2>
+    <ul>
+        <li *ngFor="let addition of fairj?.packages.Additional">
+            {{addition.Title}} - {{addition.Price}} EUR
+        </li>
+    </ul>
+</div>

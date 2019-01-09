@@ -335,5 +335,38 @@ router.post("/applicationstatus", async (req, res) =>
         { $set: { status: application.status, timestamp:application.timestamp } });
     res.json({ message: "OK" });
 });
+router.post("/getfairapplication", (req, res)=>{
+    let db = await getDb();
+    let body = req.body;
+    let user = await users.getUserByToken(body.token, db);
+    if (!user || user.kind != "company")
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let id=body.payload.id;
+    let application=await db.collection("fair_applications").findOne({company:user.username, fair:id});
+    res.json({message:"OK", payload:application});
+});
+router.post("/fairapply", (req, res)=>{
+    let db = await getDb();
+    let body = req.body;
+    let user = await users.getUserByToken(body.token, db);
+    if (!user || user.kind != "company")
+    {
+        res.status(404);
+        res.send("FAIL");
+        return;
+    }
+    let application=body.payload;
+    let oldApplication=await db.collection("fair_applications").findOne({company:user.username, fair:id});
+    if(oldApplication)
+    {
+        await db.collection("fair_applications").remove({_id:oldApplication._id}, true);
+    }
+    await db.collection("fair_applications").insertOne(application);
+    res.json({message:"OK"});
+});
 
 exports.router = router;

@@ -38,4 +38,43 @@ router.post("/setconfig", async (req, res) =>
 
 });
 
+router.post("/postfair", async (req, res) =>
+{
+    let db = await getDb();
+    let body = req.body;
+    let fair = body.payload;
+    let user = await users.getUserByToken(body.token, db);
+    if (!user || user.kind != "admin")
+    {
+        res.send("FAIL")
+        return;
+    }
+    if(fair._id)
+    {
+        let id=fair._id;
+        delete fair._id;
+        await db.collection("fairs").updateOne({_id:ObjectId(id)}, {$set:fair});
+    }
+    else
+    {
+        await db.collection("fairs").insertOne(fair);
+    }
+    res.json({ "message": "OK"});
+});
+
+router.post("/getfair", async (req, res) =>
+{
+    let db = await getDb();
+    let body = req.body;
+    let id = body.payload.id;
+    let user = await users.getUserByToken(body.token, db);
+    if (!user || user.kind != "admin")
+    {
+        res.send("FAIL")
+        return;
+    }
+    let fair=await db.collection("fairs").findOne({_id:ObjectId(id)});
+    res.json({"message":"OK", payload:fair});
+});
+
 exports.router = router;

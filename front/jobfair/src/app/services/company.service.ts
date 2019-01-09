@@ -17,6 +17,7 @@ const getApplicantInfoUrl = siteUrl+"/company/applicantinfo";
 const applicationStatusUrl=siteUrl+"/company/applicationstatus";
 const detailSearchOffersUrl=siteUrl+"/company/searchoffers";
 const scoresUrl=siteUrl+"/company/scores";
+const getFairApplicationUrl="/company/getfairapplication";
 
 @Injectable({
     providedIn: 'root'

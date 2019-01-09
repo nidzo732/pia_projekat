@@ -20,6 +20,9 @@ import { ApplicationInfoComponent } from './components/application-info/applicat
 import { FairEntryComponent } from './components/fair-entry/fair-entry.component';
 import { AdminOnlyGuard } from './guards/admin-only.guard';
 import { AdminConfigComponent } from './components/admin-config/admin-config.component';
+import { FairComponent } from './components/fair/fair.component';
+import { FairsComponent } from './components/fairs/fairs.component';
+import { FairApplicationComponent } from './components/fair-application/fair-application.component';
 
 const routes: Routes = [
     { path: "login", component: LoginComponent },
@@ -41,7 +44,11 @@ const routes: Routes = [
     { path: "cventry", component: CvEntryComponent, canActivate: [OnlyHumanGuard] },
     { path: "offerentry", component: OfferentryComponent, canActivate: [OnlyCompanyGuard] },
     { path: "fairentry", component: FairEntryComponent, canActivate: [AdminOnlyGuard] },
-    { path: "adminconfig", component: AdminConfigComponent, canActivate: [AdminOnlyGuard] }
+    { path: "fairentry/:id", component: FairEntryComponent, canActivate: [AdminOnlyGuard] },
+    { path: "adminconfig", component: AdminConfigComponent, canActivate: [AdminOnlyGuard] },
+    { path: "fair/:id", component: FairComponent },
+    { path: "fairs", component: FairsComponent },
+    { path: "fairapply/:id", component: FairApplicationComponent, canActivate: [OnlyCompanyGuard] }
 ];
 
 @NgModule({
