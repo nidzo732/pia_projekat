@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FileLoader } from 'src/app/misc/fileLoader';
 import { FairJSON, Location1, Location2, Fair, FairEvent, PackagesJSON, Package, Addition } from 'src/app/misc/models';
 import { AdminService } from 'src/app/services/admin-service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 function parseDate(date:String):String
@@ -95,7 +95,7 @@ export class FairEntryComponent implements OnInit
             }
         ]
     };
-    constructor(private adminService:AdminService, private route:ActivatedRoute) { }
+    constructor(private adminService:AdminService, private route:ActivatedRoute, private router:Router) { }
 
     async ngOnInit()
     {
@@ -328,6 +328,7 @@ export class FairEntryComponent implements OnInit
     async doSubmit()
     {
         this.fair.packages=this.packages;
-        this.adminService.postFair(this.fair);
+        await this.adminService.postFair(this.fair);
+        this.router.navigate(["/fairs"]);
     }
 }

@@ -1,3 +1,36 @@
-<p>
-  fair-application works!
-</p>
+<h2>Apply to fair</h2>
+<div class="spinner" *ngIf="loading"></div>
+<h3>{{fair?.Fair}}</h3>
+<p class="errmsg" *ngIf="errMsg">{{errMsg}}</p>
+<p *ngIf="infoMsg">{{infoMsg}}</p>
+
+<h4>Package</h4>
+<select class="form-control" [(ngModel)]="application.package" (change)="selectPackage()">
+    <option *ngFor="let package of packages; let i=index;" [value]="i">{{package.Title}}</option>
+</select>
+<h4>{{package?.Price}} EUR</h4>
+<ul>
+    <li>Video promotion length: {{package?.VideoPromotion}} minutes</li>
+    <li>Lessons: {{package?.NoLessons}}</li>
+    <li>Workshops: {{package?.NoWorkchops}}</li>
+    <li>Presentations: {{package?.NoPresentation}}</li>
+    <li *ngFor="let c of package?.Content">
+        {{c}}
+    </li>
+</ul>
+<br/><br/>
+<h4>Additions</h4>
+<div class="row">
+    <div class="form-group" *ngFor="let addition of additions; let i=index;">
+        <div class="checkbox">
+            <label><input type="checkbox" [(ngModel)]="additionCheck[i]" (change)="additionChange()">{{addition.Title}} {{addition.Price}} EUR</label>
+        </div>
+    </div>
+</div>
+<br/><br/>
+<h3>Total: {{price}} EUR</h3>
+<div class="row">
+    <div class="col-sm-4">
+        <button type="button" class="btn btn-default" (click)="apply()">Apply</button>
+    </div>
+</div>

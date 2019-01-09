@@ -1,16 +1,22 @@
 <div class="spinner" *ngIf="loading"></div>
-<h2>{{fair.Fair}}</h2>
+<h2>{{fair?.Fair}}</h2>
 <img [src]="imgSrc" class="main-img">
+<div class="row" *ngIf="oldApplication">
+    <span>You have already applied, application status: 
+        <span [class.pending]="oldApplication.status=='Pending'" [class.accepted]="oldApplication.status=='Accepted'"
+        [class.rejected]="oldApplication.status=='Rejected'">{{oldApplication.status}}</span>
+    </span>
+</div>
 <div class="row">
-    <button type="button" class="btn btn-default" *ngIf="canApply()">Apply</button>
-    <button type="button" class="btn btn-default" *ngIf="canEdit()" (click)="edit()">Edit</button>
+    <button type="button" class="btn btn-default" *ngIf="canApply()" (click)="apply()">{{oldApplication!=null?"Edit application":"Apply"}}</button>
+    <button type="button" class="btn btn-default" *ngIf="canEdit()" (click)="manageApps()">Manage applications</button>
 </div>
 <div class="row">
     <div class="col-sm-3 prop-name">
         From
     </div>
     <div class="col-sm-4">
-        {{formatDate(fair.StartDate)}}
+        {{formatDate(fair?.StartDate)}}
     </div>
 </div>
 <div class="row">
@@ -18,7 +24,15 @@
         To
     </div>
     <div class="col-sm-4">
-        {{formatDate(fair.EndDate)}}
+        {{formatDate(fair?.EndDate)}}
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-3 prop-name">
+        Application deadline 
+    </div>
+    <div class="col-sm-4">
+        {{formatDate(fair?.Deadline)}}
     </div>
 </div>
 <div class="row">
@@ -26,12 +40,12 @@
         Place
     </div>
     <div class="col-sm-4">
-        {{fair.Place}}
+        {{fair?.Place}}
     </div>
 </div>
 <br /><br />
 <p class="long-description">
-    {{fair.About}}
+    {{fair?.About}}
 </p>
 <h3>Events</h3>
 <div class="row" *ngFor="let event of fairj?.Events">

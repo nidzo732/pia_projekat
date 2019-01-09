@@ -27,6 +27,7 @@ import { RatingStarsComponent } from './components/rating-stars/rating-stars.com
 import { FairsComponent } from './components/fairs/fairs.component';
 import { FairComponent } from './components/fair/fair.component';
 import { FairApplicationComponent } from './components/fair-application/fair-application.component';
+import { ManageApplicationsComponent } from './components/manage-applications/manage-applications.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { FairApplicationComponent } from './components/fair-application/fair-app
     RatingStarsComponent,
     FairsComponent,
     FairComponent,
-    FairApplicationComponent
+    FairApplicationComponent,
+    ManageApplicationsComponent
   ],
   imports: [
     BrowserModule,

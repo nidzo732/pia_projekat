@@ -1,0 +1,33 @@
+<h2>Manage applications for fair</h2>
+<div class="spinner" *ngIf="loading"></div>
+<p class="errmsg" *ngIf="errMsg">{{errMsg}}</p>
+<p *ngIf="infoMsg">{{infoMsg}}</p>
+
+<h4>Applicants</h4>
+<div class="row">
+    <div class="form-group" *ngFor="let package of packages; let i=index;">
+        <div class="checkbox">
+            <label><input type="checkbox" [(ngModel)]="approvals[i]" (change)="checkIfOk()">{{applications[i].companyName}}
+                - {{packages[i]}}</label>
+        </div>
+    </div>
+</div>
+
+<h4>Timetable</h4>
+<div class="row" *ngFor="let event of getManagedEvents()">
+    <div class="col-sm-4 prop-name">
+        {{event.description}}
+    </div>
+    <div class="col-sm-4">
+        <input type="date" class="form-control" placeholder="Date" [(ngModel)]="event.date">
+    </div>
+    <div class="col-sm-4">
+        <input type="time" class="form-control" placeholder="Time" [(ngModel)]="event.time">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-4">
+        <button type="button" class="btn btn-default" (click)="done()">Done</button>
+    </div>
+</div>

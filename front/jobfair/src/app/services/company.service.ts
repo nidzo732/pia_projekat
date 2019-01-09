@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CompanyInfo, User, Offer, JobApplication, File } from '../misc/models';
+import { CompanyInfo, User, Offer, JobApplication, File, FairApplication } from '../misc/models';
 import { stringify } from '@angular/core/src/util';
 import { HttpService } from './http.service';
 import { Config } from '../misc/config';
@@ -17,7 +17,8 @@ const getApplicantInfoUrl = siteUrl+"/company/applicantinfo";
 const applicationStatusUrl=siteUrl+"/company/applicationstatus";
 const detailSearchOffersUrl=siteUrl+"/company/searchoffers";
 const scoresUrl=siteUrl+"/company/scores";
-const getFairApplicationUrl="/company/getfairapplication";
+const getFairApplicationUrl=siteUrl+"/company/getfairapplication";
+const applyToFairUrl=siteUrl+"/company/fairapply";
 
 @Injectable({
     providedIn: 'root'
@@ -107,6 +108,17 @@ export class CompanyService
     async getScores(offerId:String):Promise<JobApplication[]>
     {
         let response = await this.httpService.doGetForObject(scoresUrl+"/"+offerId);
+        return response.payload;
+    }
+    
+    async postFairApplication(fa:FairApplication):Promise<String>
+    {
+        return await this.httpService.doPostForString(applyToFairUrl, fa);        
+    }
+
+    async getFairApplication(fair:String):Promise<FairApplication>
+    {
+        let response = await this.httpService.doPostForObject(getFairApplicationUrl, {id:fair});
         return response.payload;
     }
 }

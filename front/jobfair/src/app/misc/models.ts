@@ -24,6 +24,16 @@ export class CompanyInfo
     static areas: String[] = ["IT", "Telecom", "Power systems", "Civil egineering", "Architecture", "Mechanical engineering"];
 
 }
+export class FairApplication
+{
+    company:String;
+    companyName?:String;
+    fair:String;
+    package:number;
+    additions:number[];
+    status?:String;
+    _id?:String;
+}
 export class File
 {
     static supportedIcons: String[] = [
@@ -165,6 +175,13 @@ export class User
     pictureUrl?: String;
     admin?: boolean;
 }
+export class CompanyEvent
+{
+    description:String;
+    date?:String;
+    time?:String;
+    approved:boolean;
+}
 export class Fair
 {
     Fair?:String;
@@ -247,6 +264,7 @@ export class FairJSON
     Events?:FairEvent[];
     Locations:Location1[];
     packages?:PackagesJSON;
+    CompanyEvents?:CompanyEvent[];
     _id?:String;
     static validate(json:FairJSON):String
     {
