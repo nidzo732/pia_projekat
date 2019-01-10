@@ -11,31 +11,36 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li><a routerLink="/dashboard">Dashboard</a></li>
+                <ng-container *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">
+                    <li><a routerLink="/myapplications">My applications</a></li>
+                </ng-container>
+                <ng-container *ngIf="userService.loggedIn && userService.currentUser().kind=='company'">
+                    <li><a routerLink="/myoffers">My offers</a></li>
+                    <li><a routerLink="/fairs">Fairs</a></li>
+                </ng-container>
+                <ng-container *ngIf="userService.loggedIn && userService.currentUser().kind=='admin'">
+                    <li><a routerLink="/fairentry">New fair</a></li>
+                    <li><a routerLink="/adminconfig">Config</a></li>
+                    <li><a routerLink="/fairs">Fairs</a></li>
+                </ng-container>
             </ul>
-            <ul class="nav navbar-nav navbar" *ngIf="userService.loggedIn && userService.currentUser().kind=='human'">
-                <li><a routerLink="/myapplications">My applications</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar" *ngIf="userService.loggedIn && userService.currentUser().kind=='company'">
-                <li><a routerLink="/myoffers">My offers</a></li>
-                <li><a routerLink="/fairs">Fairs</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar" *ngIf="userService.loggedIn && userService.currentUser().kind=='admin'">
-                <li><a routerLink="/fairentry">New fair</a></li>
-                <li><a routerLink="/adminconfig">Config</a></li>
-                <li><a routerLink="/fairs">Fairs</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn && userService.currentUser().kind=='human' && userService.currentUser().canFillCV">
-                <li><a routerLink="/cventry">Update my CV</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn  && userService.currentUser().kind=='company'">
-                <li><a routerLink="/offerentry">Enter job offer</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right" *ngIf="userService.loggedIn">
-                <li><a (click)="doLogout()">Logout</a></li>
-                <li><a routerLink="/setpassword">Set password</a></li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right" *ngIf="!userService.loggedIn">
-                <li><a routerLink="/login">Log in</a></li>
+            <ul class="nav navbar-nav navbar-right">
+                <ng-container *ngIf="userService.loggedIn && userService.currentUser().kind=='human' && userService.currentUser().canFillCV">
+                    <li><a routerLink="/cventry">Update my CV</a></li>
+                </ng-container>
+                <ng-container *ngIf="userService.loggedIn  && userService.currentUser().kind=='company'">
+                    <li><a routerLink="/offerentry">Enter job offer</a></li>
+                </ng-container>
+                <ng-container class="nav navbar-nav navbar-right" *ngIf="!userService.loggedIn">
+                    <li><a routerLink="/login">Log in</a></li>
+                </ng-container>
+                <ng-container *ngIf="userService.loggedIn">
+                    <li><a routerLink="/setpassword">Set password</a></li>
+                    <li><a href="javascript:;" (click)="doLogout()">Logout</a></li>
+                </ng-container>
+                <a class="navbar-brand navbar-right" id="imagebrand" href="javascript:;" *ngIf="userService.loggedIn">
+                    <img [title]="userService.getLongUserName()" id="userimage" [src]="userService.getPictureUrl(userService.currentUser().username)">
+                </a>
             </ul>
         </div>
     </div>
@@ -46,6 +51,6 @@
 
     <hr />
     <footer>
-        <p>&copy; 2019 - My ASP.NET Application</p>
+        <p>&copy; 2019 - Nikola Pavlović</p>
     </footer>
 </div>

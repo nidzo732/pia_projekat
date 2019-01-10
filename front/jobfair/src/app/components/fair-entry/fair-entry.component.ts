@@ -61,7 +61,7 @@ export class FairEntryComponent implements OnInit
     loading:boolean=false;
     step:number=0;
     allReadonly:boolean=false;
-    logoSrc:String;
+    logoSrc:String="";
     fair:FairJSON={
         Locations:[
             {

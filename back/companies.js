@@ -2,7 +2,7 @@ var express = require("express");
 var ObjectId = require("mongodb").ObjectId;
 var crypto_utils = require("./crypto_utils");
 var getDb = require("./db").getDb;
-var users = require("./users");
+var requireUser = require("./users").requireUser;
 var router = require("express-promise-router")();
 
 router.get("/search/:name/:city/:area", async (req, res) =>
@@ -85,16 +85,10 @@ function validOffer(offer)
 }
 router.post("/newoffer", async (req, res) =>
 {
-
     let db = await getDb();
     let body = req.body;
     let offer = body.payload;
-    let user = await users.getUserByToken(body.token, db);
-    if (!user || user.kind != "company")
-    {
-        res.send("FAIL")
-        return;
-    }
+    let user = requireUser(req, "company");
     if (validOffer(offer) != "OK")
     {
         res.json({ "message": validOffer(offer) });
@@ -159,13 +153,7 @@ router.post("/applications", async (req, res) =>
 {
     let db = await getDb();
     let body = req.body;
-    let user = await users.getUserByToken(body.token, db);
-    if (!user || user.kind != "company")
-    {
-        res.status(404);
-        res.send("FAIL");
-        return;
-    }
+    let user = requireUser(req, "company");
     let offerId = req.body.payload.offerId;
     let offer = await db.collection("offers").findOne({ _id: ObjectId(offerId) });
     if (!offer || offer.company != user.username)
@@ -197,13 +185,7 @@ router.post("/application", async (req, res) =>
 {
     let db = await getDb();
     let body = req.body;
-    let user = await users.getUserByToken(body.token, db);
-    if (!user || user.kind != "company")
-    {
-        res.status(404);
-        res.send("FAIL");
-        return;
-    }
+    let user = requireUser(req, "company");
     let id = req.body.payload.id;
     let application = await db.collection("applications").findOne({ _id: ObjectId(id) }, { projection: { "coverLetterUpload.content64": 0 } });
     if (!application)
@@ -225,13 +207,7 @@ router.post("/coverletter", async (req, res) =>
 {
     let db = await getDb();
     let body = req.body;
-    let user = await users.getUserByToken(body.token, db);
-    if (!user || user.kind != "company")
-    {
-        res.status(404);
-        res.send("FAIL");
-        return;
-    }
+    let user = requireUser(req, "company");
     let id = req.body.payload.id;
     let application = await db.collection("applications").findOne({ _id: ObjectId(id) });
     if (!application || !application.coverLetterUpload)
@@ -254,13 +230,7 @@ router.post("/applicantinfo", async (req, res) =>
 {
     let db = await getDb();
     let body = req.body;
-    let user = await users.getUserByToken(body.token, db);
-    if (!user || user.kind != "company")
-    {
-        res.status(404);
-        res.send("FAIL");
-        return;
-    }
+    let user = requireUser(req, "company");
     let id = req.body.payload.id;
     let application = await db.collection("applications").findOne({ _id: ObjectId(id) });
     if (!application)
@@ -298,13 +268,7 @@ router.post("/applicationstatus", async (req, res) =>
 {
     let db = await getDb();
     let body = req.body;
-    let user = await users.getUserByToken(body.token, db);
-    if (!user || user.kind != "company")
-    {
-        res.status(404);
-        res.send("FAIL");
-        return;
-    }
+    let user = requireUser(req, "company");
     let id = req.body.payload.id;
     let accepted = req.body.payload.accepted;
     let application = await db.collection("applications").findOne({ _id: ObjectId(id) });
@@ -335,36 +299,73 @@ router.post("/applicationstatus", async (req, res) =>
         { $set: { status: application.status, timestamp:application.timestamp } });
     res.json({ message: "OK" });
 });
-router.post("/getfairapplication", (req, res)=>{
+router.post("/getfairapplication", async (req, res)=>{
     let db = await getDb();
     let body = req.body;
-    let user = await users.getUserByToken(body.token, db);
-    if (!user || user.kind != "company")
-    {
-        res.status(404);
-        res.send("FAIL");
-        return;
-    }
+    let user = requireUser(req, "company");
     let id=body.payload.id;
     let application=await db.collection("fair_applications").findOne({company:user.username, fair:id});
     res.json({message:"OK", payload:application});
 });
-router.post("/fairapply", (req, res)=>{
+function validApplication(application, fair)
+{
+    if(!application.fair) return "FAIL";
+    if(application.package==null) return "FAIL";
+    if(application.package<0 || application.package>=fair.packages.Packages.length)
+    {
+        return "FAIL";
+    }
+    let result="OK";
+    if(application.additions==null) return "FAIL";
+    if(application.additions)
+    {
+        application.additions.forEach((x,y)=>{
+            if(x==null || x<0 || x>fair.packages.Additional.length)
+            {
+                result="FAIL";
+            }
+        });
+    }
+    return result;
+}
+
+router.post("/fairapply", async (req, res)=>{
     let db = await getDb();
     let body = req.body;
-    let user = await users.getUserByToken(body.token, db);
-    if (!user || user.kind != "company")
+    let user = requireUser(req, "company");
+    let application=body.payload;
+    let fair=await db.collection("fairs").findOne({_id:ObjectId(application.fair)});
+    if(fair==null)
     {
         res.status(404);
         res.send("FAIL");
         return;
     }
-    let application=body.payload;
-    let oldApplication=await db.collection("fair_applications").findOne({company:user.username, fair:id});
+    let deadline=new Date(fair.Fairs[0].Deadline);
+    let now=new Date();
+    if(deadline<now)
+    {
+        res.json({message:"Deadline has expired"});
+        return;
+    }
+    if(validApplication(application, fair)!="OK")
+    {
+        res.json({message:validApplication(application, fair)});
+        return;
+    }
+
+    let oldApplication=await db.collection("fair_applications").findOne({company:user.username, fair:application.fair});
     if(oldApplication)
     {
-        await db.collection("fair_applications").remove({_id:oldApplication._id}, true);
+        if(oldApplication.status!="Pending")
+        {
+            res.json({message:"Your application has already been "+oldApplication.status+" you can't change it now"});
+            return;
+        }
+        await db.collection("fair_applications").deleteOne({_id:oldApplication._id});
     }
+    application.status="Pending";
+    application.companyName=user.companyInfo.name;
     await db.collection("fair_applications").insertOne(application);
     res.json({message:"OK"});
 });

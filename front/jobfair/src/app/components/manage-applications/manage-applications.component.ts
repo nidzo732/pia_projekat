@@ -135,7 +135,7 @@ export class ManageApplicationsComponent implements OnInit
             this.errMsg="You did not approve any companies";
             return;
         }
-        this.fairj.CompanyEvents.forEach(x=>{
+        this.getManagedEvents().forEach(x=>{
             if(!x.date)
             {
                 this.errMsg="Date not entered for "+x.description;
@@ -170,7 +170,10 @@ export class ManageApplicationsComponent implements OnInit
             if(this.approvals[i]) this.applications[i].status="Accepted";
             else this.applications[i].status="Rejected";
         }
+        let oldEvents=this.fairj.CompanyEvents;
+        this.fairj.CompanyEvents=this.getManagedEvents();
         let response = await this.adminService.manageFair(this.fairj, this.applications);
+        this.fairj.CompanyEvents=oldEvents;
         if(response="OK")
         {
             this.infoMsg="Fair updated successfully";

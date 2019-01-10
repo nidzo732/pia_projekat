@@ -32,6 +32,7 @@ export class FairApplication
     package:number;
     additions:number[];
     status?:String;
+    adminComment?:String;
     _id?:String;
 }
 export class File

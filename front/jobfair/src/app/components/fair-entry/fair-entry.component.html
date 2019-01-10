@@ -152,64 +152,64 @@
             </div>
         </div>
     </div>
-    <div class="row" *ngFor="let package of packages.Packages">
+    <div class="form-group" *ngFor="let package of packages.Packages">
         <hr />
         <h3>Package</h3>
         <button [disabled]="allReadonly" type="button" class="btn btn-default" (click)="removePackage(package)">Remove</button>
-        <div class="form-group">
+        <div class="row">
             <div class="col-md-10">
                 <label>Title</label>
                 <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.Title" placeholder="Title" />
             </div>
         </div>
-        <div class="form-group">
+        <div class="row">
             <div class="col-md-10">
                 <label>Video promotion length</label>
                 <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.VideoPromotion" placeholder="Video promotion length"
                     type="number" />
             </div>
         </div>
-        <div class="form-group">
+        <div class="row">
             <div class="col-md-10">
                 <label>Number of lessons</label>
                 <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.NoLessons" placeholder="Number of lessons"
                     type="number" />
             </div>
         </div>
-        <div class="form-group">
+        <div class="row">
             <div class="col-md-10">
                 <label>Number of workshops</label>
                 <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.NoWorkchops" placeholder="Number of workshops"
                     type="number" />
             </div>
         </div>
-        <div class="form-group">
+        <div class="row">
             <div class="col-md-10">
                 <label>Number of presentations</label>
                 <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.NoPresentation" placeholder="Number of presentations"
                     type="number" />
             </div>
         </div>
-        <div class="form-group">
+        <div class="row">
             <div class="col-md-10">
                 <label>Price</label>
                 <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.Price" placeholder="Price"
                     type="number" />
             </div>
         </div>
-        <div class="form-group">
+        <div class="row">
             <div class="col-md-10">
                 <label>Max companies</label>
                 <input [readonly]="allReadonly" class="form-control" [(ngModel)]="package.MaxCompanies" placeholder="Max companies"
                     type="number" />
             </div>
         </div>
-        <div class="form-group">
+        <div class="row">
             <div class="col-md-10">
                 <label>Content</label>
             </div>
         </div>
-        <div class="form-group">
+        <div class="row">
             <div class="col-sm-12">
                 <div class="row" *ngFor="let content of package.tmpContent; let i = index;">
                     <div class="col-sm-8">
@@ -221,7 +221,7 @@
                 </div>
             </div>
         </div>
-        <div class="form-group">
+        <div class="row">
             <div class="col-md-10">
                 <button [disabled]="allReadonly" type="button" class="btn btn-default" (click)="addContent(package)">Add</button>
             </div>

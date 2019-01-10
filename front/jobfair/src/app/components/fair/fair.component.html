@@ -7,6 +7,9 @@
         [class.rejected]="oldApplication.status=='Rejected'">{{oldApplication.status}}</span>
     </span>
 </div>
+<div class="row" *ngIf="oldApplication?.adminComment">
+    <span>Comment: {{oldApplication?.adminComment}}</span>
+</div>
 <div class="row">
     <button type="button" class="btn btn-default" *ngIf="canApply()" (click)="apply()">{{oldApplication!=null?"Edit application":"Apply"}}</button>
     <button type="button" class="btn btn-default" *ngIf="canEdit()" (click)="manageApps()">Manage applications</button>

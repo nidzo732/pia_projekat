@@ -86,6 +86,22 @@ export class UserService
         if (!username) return "#";
         return pictureUrl + "/" + username;
     }
+    getLongUserName():String
+    {
+        if(!this.loggedIn) return "";
+        if(this.currentUser().kind=="human")
+        {
+            return this.currentUser().humanInfo.firstName+" "+this.currentUser().humanInfo.lastName;
+        }
+        else if(this.currentUser().kind=="company")
+        {
+            return this.currentUser().companyInfo.name;
+        }
+        else
+        {
+            return "Admin";
+        }
+    }
     async getMyApplications(): Promise<JobApplication[]>
     {
         return (await this.httpService.doPostForObject(myApplicationsUrl, {})).payload;

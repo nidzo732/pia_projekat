@@ -4,6 +4,7 @@ var ObjectId = require("mongodb").ObjectId;
 var getDb = require("./db").getDb;
 var getAdminConfig = require("./db").getAdminConfig;
 var router = require("express-promise-router")();
+var jimp = require("jimp");
 
 
 async function getUserByToken(token, db)
@@ -22,6 +23,22 @@ async function getUserPicture(username, db)
 {
     let user = await db.collection("users").findOne({ username: username }, { projection: { picture: 1, pictureType: 1 } });
     return user;
+}
+
+function requireUser(request, kind)
+{
+    if (!request.user)
+    {
+        throw "User required but not found";
+    }
+    if (kind)
+    {
+        if (request.user.kind != kind)
+        {
+            throw "User kind did not match, required " + kind + " got " + user.kind;
+        }
+    }
+    return request.user;
 }
 
 function okPassword(password)
@@ -89,7 +106,7 @@ async function testPwd(userObject, password)
 {
     return await crypto_utils.kdf2Test(password, userObject.password);
 }
-function setPicture(userObject)
+async function setPicture(userObject)
 {
     try
     {
@@ -98,11 +115,20 @@ function setPicture(userObject)
         if (ctype.indexOf("image/") != 0) return false;
         userObject.picture = picture;
         userObject.pictureType = ctype;
-        return true;
+        let buffer = Buffer.from(picture, "base64");
+        let image = await jimp.read(buffer);
+        if (image.getWidth() < 100 || image.getWidth() > 300
+            || image.getHeight() < 100 || image.getHeight() > 300)
+        {
+            return "Image size must be between 100x100 and 300x300";
+        }
+        
+        return "OK";
     }
-    catch{
+    catch(ex){
         console.error("Invalid picture uploaded");
-        return false;
+        console.error(ex);
+        return "Uploaded file is not a picture";
     }
 }
 
@@ -122,9 +148,10 @@ router.post("/register", async (req, res) =>
     }
     let user = req.body.payload;
     await setPwd(user, user.password);
-    if (!setPicture(user))
+    let setPictureResult=await setPicture(user);
+    if (setPictureResult != "OK")
     {
-        res.json({ message: "FAILP" });
+        res.json({ message: setPictureResult });
         return;
     }
     await db.collection("users").insertOne(user);
@@ -166,8 +193,7 @@ router.post("/setpwd", async (req, res) =>
 {
     let body = req.body;
     let db = await getDb();
-    let user = await getUserByToken(body.token, db);
-    if (user == null) return "FAIL";
+    let user = await requireUser(req);
     if (!(await testPwd(user, body.payload.oldPassword)))
     {
         res.json({ message: "Old password invalid" });
@@ -210,8 +236,7 @@ router.post("/setcv", async (req, res) =>
 {
     let body = req.body;
     let db = await getDb();
-    let user = await getUserByToken(body.token, db);
-    if (user == null || user.kind != "human") return "FAIL";
+    let user = requireUser(req, "human");
     if (validCV(body.payload) != "OK")
     {
         res.json({ message: validCV(body.payload) });
@@ -221,10 +246,10 @@ router.post("/setcv", async (req, res) =>
     let cvDeadline = new Date();
     let config = await getAdminConfig(db);
     cvDeadline.setDate(config.cvDeadline + cvDeadline.getDate());
-    let now=new Date();
-    if(user.cvDeadline && user.cvDeadline<now)
+    let now = new Date();
+    if (user.cvDeadline && user.cvDeadline < now)
     {
-        res.json({message:"CV entry deadline has expired"});
+        res.json({ message: "CV entry deadline has expired" });
         return;
     }
     if (!user.cvDeadline || user.cvDeadline > cvDeadline)
@@ -272,7 +297,7 @@ router.post("/apply", async (req, res) =>
 {
     let body = req.body;
     let db = await getDb();
-    let user = await getUserByToken(body.token, db);
+    let user = requireUser(req, "human");
     if (user.humanInfo.cv == null)
     {
         res.status(404);
@@ -280,12 +305,6 @@ router.post("/apply", async (req, res) =>
         return;
     }
     let application = body.payload;
-    if (user == null || user.kind != "human")
-    {
-        res.status(404);
-        res.send("FAIL");
-        return;
-    }
     if (validApplication(application) != "OK")
     {
         res.json({ message: validApplication(application) });
@@ -329,56 +348,45 @@ router.post("/myapplications", async (req, res) =>
 {
     let body = req.body;
     let db = await getDb();
-    let user = await getUserByToken(body.token, db);
-    if (user == null || user.kind != "human")
-    {
-        res.status(404);
-        res.send("FAIL");
-        return;
-    }
+    let user = requireUser(req, "human");
     let applications = await db.collection("applications").find({ username: user.username }).toArray();
     res.json({ message: "OK", payload: applications });
 })
 router.post("/rateapp", async (req, res) =>
 {
-    let body=req.body;
+    let body = req.body;
     let db = await getDb();
-    let user = await getUserByToken(body.token, db);
-    if (user == null || user.kind != "human")
-    {
-        res.status(404);
-        res.send("FAIL1");
-        return;
-    }
-    let payload=body.payload;
-    if(payload.rating<1 || payload.rating>10)
+    let user = requireUser(req, "human");
+    let payload = body.payload;
+    if (payload.rating < 1 || payload.rating > 10)
     {
         res.status(404);
         res.send("FAIL2");
         return;
     }
-    let appId=payload.appId;
-    let application=await db.collection("applications").findOne({_id:ObjectId(appId)});
-    if(application==null || application.username!=user.username || application.status!="Accepted")
+    let appId = payload.appId;
+    let application = await db.collection("applications").findOne({ _id: ObjectId(appId) });
+    if (application == null || application.username != user.username || application.status != "Accepted")
     {
         res.status(404);
         res.send("FAIL3");
         return;
     }
-    let now=new Date();
-    let stamp=application.timestamp;
-    stamp.setMonth(stamp.getMonth()+1);
-    if(now<stamp)
+    let now = new Date();
+    let stamp = application.timestamp;
+    stamp.setMonth(stamp.getMonth() + 1);
+    if (now < stamp)
     {
         res.status(404);
         res.send("FAIL4");
         return;
     }
-    await db.collection("applications").updateOne({_id:ObjectId(appId)}, {$set:{rating:payload.rating}});
-    res.json({message:"OK"})
+    await db.collection("applications").updateOne({ _id: ObjectId(appId) }, { $set: { rating: payload.rating } });
+    res.json({ message: "OK" })
 
 });
 
 exports.router = router;
 exports.getUserByName = getUserByName;
 exports.getUserByToken = getUserByToken;
+exports.requireUser = requireUser;
